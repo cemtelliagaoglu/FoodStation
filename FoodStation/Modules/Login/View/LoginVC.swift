@@ -10,6 +10,8 @@ import UIKit
 class LoginVC: UIViewController{
     //MARK: - Properties
     
+    var presenter: LoginViewToPresenter?
+    
     lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Email"
@@ -17,6 +19,7 @@ class LoginVC: UIViewController{
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
         textField.textColor = UIColor(named: "textColor")
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
     
@@ -27,12 +30,13 @@ class LoginVC: UIViewController{
         textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
     
     lazy var loginButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor(named: "bgColor1")
+        button.backgroundColor = .systemGray
         let attributedTitle = NSAttributedString(string: "Login",
                                                  attributes: [
                                                     .foregroundColor: UIColor.white,
@@ -65,27 +69,46 @@ class LoginVC: UIViewController{
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSignUpTapped))
         tapGesture.numberOfTapsRequired = 1
         label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configUI()
+        presenter?.notifyViewDidLoad()
     }
     
     //MARK: - Handlers
     
     @objc func handleLoginTapped(){
-        
+        if let email = emailTextField.text, let password = passwordTextField.text{
+            presenter?.loginTapped(with: email, password)
+        }
     }
     @objc func handleSignUpTapped(){
-        
+        presenter?.signUpTapped()
     }
     
     
-    func configUI(){
-        view.backgroundColor = UIColor(named: "bgColor2")
+    @objc func formValidation(){
+        guard emailTextField.hasText,
+              passwordTextField.hasText,
+              passwordTextField.text!.count >= 6 else{
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = .systemGray
+            return
+        }
+        loginButton.isEnabled = true
+        loginButton.backgroundColor = UIColor(named: "bgColor1")
+    }
+    
+}
+//MARK: - PresenterToView Methods
+extension LoginVC: LoginPresenterToView{
+    
+    func configUI() {
+        view.backgroundColor = UIColor(named: "bgColor3")
         view.addSubview(loginButton)
         view.addSubview(passwordTextField)
         view.addSubview(emailTextField)
@@ -111,6 +134,11 @@ class LoginVC: UIViewController{
 //            signUpLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             
         ])
-        
+    }
+    
+    func showAuthenticationError(_ error: Error) {
+        let alert = UIAlertController(title: "Failed to Login", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
+        present(alert, animated: true)
     }
 }
