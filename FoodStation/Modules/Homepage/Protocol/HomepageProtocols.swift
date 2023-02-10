@@ -14,27 +14,32 @@ protocol HomepageViewToPresenter{
     
     func loadData()
 //    func loadCardInfo()
-    
-    func changeVC()
+    func logOutTapped()
+    func didSelectFood(_ food: Food)
 }
 
 protocol HomepagePresenterToInteractor{
     var presenter: HomepageInteractorToPresenter? { get set }
     
     func loadData()
-    
+    func requestSignOut()
 }
 
 protocol HomepageInteractorToPresenter{
     
-    func sendFetchedData(_ foods: [Food])
-//    func sendFetchedData(_ food: Food, image: UIImage)
 //    func deleteFromCard(_ foodId: Int)
+    func loadDataSucceed(with foods: [Food])
+    func loadDataFailed()
+    
+    func requestSignOutSucceed()
+    func requestSignOutFailed()
+    
 }
 
 protocol HomepagePresenterToView{
     
     func sendFetchedData(_ foods: [Food])
+    func failedToSignOut()
 //    func sendFetchedData(_ foods: Food, image: UIImage)
 }
 
@@ -42,5 +47,6 @@ protocol HomepagePresenterToView{
 protocol HomepagePresenterToRouter{
     static func createModule() -> UINavigationController
     
-    func changeVC()
+    func pushToLoginVC()
+    func pushToDetailsVC(for food: Food)
 }

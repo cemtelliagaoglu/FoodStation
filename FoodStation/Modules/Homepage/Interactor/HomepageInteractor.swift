@@ -7,10 +7,12 @@
 
 import Alamofire
 import Kingfisher
-import UIKit
-
+import FirebaseAuth
 
 class HomepageInteractor: HomepagePresenterToInteractor{
+    // food data
+    // load user-cart data to calculate total price and return it to the view
+    
     var presenter: HomepageInteractorToPresenter?
     
     private let imagesBaseURLString = "http://kasimadalan.pe.hu/yemekler/resimler/"
@@ -30,15 +32,26 @@ class HomepageInteractor: HomepagePresenterToInteractor{
                         food.foodImageURL = self.imagesBaseURLString + food.foodImageName
                         foods.append(food)
                     }
-                    
-                    self.presenter?.sendFetchedData(foods)
+                    self.presenter?.loadDataSucceed(with: foods)
                 }catch{
                     print(error)
                 }
             }
         }
-        
     }
+    func requestSignOut() {
+        do{
+            try Auth.auth().signOut()
+            presenter?.requestSignOutSucceed()
+        }catch{
+            print(error)
+            presenter?.requestSignOutFailed()
+        }
+    }
+    
+//    func logOutTapped(from navController: UINavigationController) {
+//        
+//    }
     
 }
 

@@ -24,10 +24,18 @@ class HomepageVC: UIViewController {
         collectionView.backgroundColor = UIColor(named: "bgColor1")
         return collectionView
     }()
+    
+    
+    lazy var  logOutButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(title: "Log Out", image: nil, target: self, action: #selector(handleLogOuTapped))
+        button.setTitleTextAttributes([.font: UIFont(name: "OpenSans-MediumItalic", size: 16)!], for: .normal)
+        return button
+    }()
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        APIService.loadCart(for: "deneme")
         configUI()
         loadData()
     }
@@ -35,8 +43,8 @@ class HomepageVC: UIViewController {
     //MARK: - Handlers
     func configUI(){
         view.backgroundColor = UIColor(named: "bgColor1")
-        navigationItem.title = "Food Station"
-        
+        navigationItem.title = "FoodStation"
+        navigationItem.leftBarButtonItem = logOutButton
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(FoodCell.self, forCellWithReuseIdentifier: foodCellIdentifier)
@@ -55,6 +63,19 @@ class HomepageVC: UIViewController {
         presenter?.loadData()
     }
 
+    @objc func handleLogOuTapped(){
+        
+        // declare alert controller
+        let alertController = UIAlertController(title: "Are you sure to log out?", message: nil, preferredStyle: .alert)
+        // add alert action
+        alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
+            self.presenter?.logOutTapped()
+//            self.presenter?.logOutTapped(from: navController)
+        }))
+            
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alertController,animated: true)
+    }
 }
 //MARK: - UICollectionView
 extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
@@ -84,6 +105,9 @@ extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter?.didSelectFood(foodList[indexPath.row])
+    }
     
 }
 
@@ -95,6 +119,17 @@ extension HomepageVC: HomepagePresenterToView{
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
+    }
+    func failedToSignOut() {
+        let alert = UIAlertController(title: "Error", message: "Failed To Sign Out", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { action in
+            self.presenter?.logOutTapped()
+        })
+        
+        present(alert, animated: true)
+        
     }
     
 }
