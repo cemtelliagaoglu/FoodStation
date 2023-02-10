@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MainTabVC: UITabBarController{
     
@@ -14,18 +15,29 @@ class MainTabVC: UITabBarController{
         
         setupViewControllers()
         configTabBar()
+        checkIfUserIsLoggedIn()
+        
     }
     
     func setupViewControllers(){
         let homepageVC = HomepageRouter.createModule()
-        
         homepageVC.tabBarItem.image = UIImage(systemName: "house.fill")
         
-        let detailsVC = DetailsVC()
-        detailsVC.tabBarItem.image = UIImage(systemName: "person.fill")
-        self.viewControllers = [homepageVC, detailsVC]
+        let profileVC = ProfileRouter.createModule()
+        profileVC.tabBarItem.image = UIImage(systemName: "person.fill")
+        self.viewControllers = [homepageVC, profileVC]
     }
     
+    func checkIfUserIsLoggedIn(){
+        if Auth.auth().currentUser == nil{
+            DispatchQueue.main.async {
+                // present login controller
+                let navController = LoginRouter.createModule()
+                navController.modalPresentationStyle = .fullScreen
+                self.present(navController, animated: true)
+            }
+        }
+    }
     func configTabBar(){
         tabBar.tintColor = UIColor(named: "bgColor1")
         tabBar.backgroundColor = UIColor(named: "bgColor2")
