@@ -57,9 +57,9 @@ class LoginVC: UIViewController{
                                                             .foregroundColor: UIColor(named: "textColor")!,
                                                             .font: UIFont(name: "OpenSans-MediumItalic", size: 16)!
                                                          ])
-        attributedText.append(NSAttributedString(string: "Click here to Register",
+        attributedText.append(NSAttributedString(string: "Tap here to Sign Up",
                                                    attributes: [
-                                                    .foregroundColor: UIColor(named: "bgColor1")!,
+                                                    .foregroundColor: UIColor(named: "bgColor4")!,
                                                     .font: UIFont(name: "OpenSans-Medium", size: 16)!
                                                    ]))
         label.numberOfLines = 1
@@ -90,7 +90,6 @@ class LoginVC: UIViewController{
         presenter?.signUpTapped()
     }
     
-    
     @objc func formValidation(){
         guard emailTextField.hasText,
               passwordTextField.hasText,
@@ -100,9 +99,8 @@ class LoginVC: UIViewController{
             return
         }
         loginButton.isEnabled = true
-        loginButton.backgroundColor = UIColor(named: "bgColor1")
+        loginButton.backgroundColor = UIColor(named: "bgColor4")
     }
-    
 }
 //MARK: - PresenterToView Methods
 extension LoginVC: LoginPresenterToView{
