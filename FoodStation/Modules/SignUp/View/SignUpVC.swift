@@ -70,7 +70,7 @@ class SignUpVC: UIViewController{
                                                          ])
         attributedText.append(NSAttributedString(string: "Tap here to Login",
                                                    attributes: [
-                                                    .foregroundColor: UIColor(named: "bgColor1")!,
+                                                    .foregroundColor: UIColor(named: "bgColor4")!,
                                                     .font: UIFont(name: "OpenSans-Medium", size: 16)!
                                                    ]))
         label.numberOfLines = 1
@@ -113,7 +113,7 @@ class SignUpVC: UIViewController{
             return
         }
         signUpButton.isEnabled = true
-        signUpButton.backgroundColor = UIColor(named: "bgColor1")
+        signUpButton.backgroundColor = UIColor(named: "bgColor4")
     }
     
 }
