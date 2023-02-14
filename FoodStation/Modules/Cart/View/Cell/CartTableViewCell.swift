@@ -63,20 +63,6 @@ class CartTableViewCell: UITableViewCell{
         return stepper
     }()
     
-//    lazy var mainStackView: UIStackView = {
-//        let stackView = UIStackView(arrangedSubviews: [imageView, bottomStackView])
-//        stackView.axis = .vertical
-//        stackView.layer.cornerRadius = 10
-//        stackView.backgroundColor = UIColor(named: "bgColor2")
-//        stackView.contentMode = .scaleToFill
-//        stackView.distribution = .fill
-//        bottomStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor,constant: 8).isActive = true
-//        bottomStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -8).isActive = true
-//        stackView.spacing = 8
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        return stackView
-//    }()
-    
     //MARK: - Lifecycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -112,9 +98,7 @@ class CartTableViewCell: UITableViewCell{
             customStepper.widthAnchor.constraint(equalToConstant: 100),
             customStepper.heightAnchor.constraint(equalToConstant: 40)
         ])
-        
     }
-
 }
 //MARK: - CustomStepperDelegate
 extension CartTableViewCell: CustomStepperDelegate{
