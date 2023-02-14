@@ -25,7 +25,11 @@ class MainTabVC: UITabBarController{
         
         let profileVC = ProfileRouter.createModule()
         profileVC.tabBarItem.image = UIImage(systemName: "person.fill")
-        self.viewControllers = [homepageVC, profileVC]
+        
+        let cartVC = CartRouter.createModule()
+        cartVC.tabBarItem.image = UIImage(systemName: "cart.fill")
+        self.viewControllers = [homepageVC, cartVC, profileVC]
+        
     }
     
     func checkIfUserIsLoggedIn(){
