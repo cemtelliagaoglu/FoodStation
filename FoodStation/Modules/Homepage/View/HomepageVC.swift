@@ -11,7 +11,6 @@ class HomepageVC: UIViewController {
     //MARK: - Properties
     private let foodCellIdentifier = "foodCellIdentifier"
     
-    var foodList = [Food]()
     var imagesBaseURLString = "http://kasimadalan.pe.hu/yemekler/resimler/"
     
     var presenter: HomepageViewToPresenter?
@@ -21,7 +20,7 @@ class HomepageVC: UIViewController {
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = UIColor(named: "bgColor1")
+        collectionView.backgroundColor = UIColor(named: "bgColor2")
         return collectionView
     }()
     
@@ -35,34 +34,10 @@ class HomepageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        APIService.loadCart(for: "deneme")
-        configUI()
-        loadData()
+        presenter?.notifyViewDidLoad()
     }
     
     //MARK: - Handlers
-    func configUI(){
-        view.backgroundColor = UIColor(named: "bgColor1")
-        navigationItem.title = "FoodStation"
-        navigationItem.leftBarButtonItem = logOutButton
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(FoodCell.self, forCellWithReuseIdentifier: foodCellIdentifier)
-        view.addSubview(collectionView)
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
-    }
-    
-    func loadData(){
-        presenter?.loadData()
-    }
-
     @objc func handleLogOuTapped(){
         
         // declare alert controller
@@ -80,20 +55,19 @@ class HomepageVC: UIViewController {
 //MARK: - UICollectionView
 extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return foodList.count
+        return presenter?.numberOfItems() ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: foodCellIdentifier, for: indexPath) as! FoodCell
         
-        cell.food = foodList[indexPath.row]
-        
+        cell.food = presenter?.foodForCell(at: indexPath.row)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (UIScreen.main.bounds.width - 32) / 3
-        return CGSize(width: width, height: 100)
+        let width = (UIScreen.main.bounds.width - 24) / 2
+        return CGSize(width: width, height: 150)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -106,7 +80,7 @@ extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICol
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        presenter?.didSelectFood(foodList[indexPath.row])
+        presenter?.didSelectFood(at: indexPath.row)
     }
     
 }
@@ -114,21 +88,37 @@ extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICol
 //MARK: - PresenterToView Methods
 extension HomepageVC: HomepagePresenterToView{
     
-    func sendFetchedData(_ foods: [Food]) {
-        self.foodList = foods
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+    func configUI() {
+        view.backgroundColor = UIColor(named: "bgColor1")
+        navigationItem.title = "FoodStation"
+        navigationItem.leftBarButtonItem = logOutButton
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(FoodCell.self, forCellWithReuseIdentifier: foodCellIdentifier)
+        view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
-    func failedToSignOut() {
-        let alert = UIAlertController(title: "Error", message: "Failed To Sign Out", preferredStyle: .alert)
+    
+    func reloadData() {
+        collectionView.reloadData()
+    }
+
+    func showErrorMessage(_ errorMessage: String) {
+        let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
         
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { action in
-            self.presenter?.logOutTapped()
-        })
-        
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         present(alert, animated: true)
+    }
+    func startLoadingAnimation() {
+        
+    }
+    func stopLoadingAnimation() {
         
     }
     

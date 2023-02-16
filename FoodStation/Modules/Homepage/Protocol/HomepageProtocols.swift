@@ -12,35 +12,40 @@ protocol HomepageViewToPresenter{
     var view: HomepagePresenterToView? { get set }
     var router: HomepagePresenterToRouter? { get set }
     
-    func loadData()
-//    func loadCardInfo()
+    func notifyViewDidLoad()
+    func updateFoodInCart(at index: Int, amount: Int)
+    func numberOfItems() -> Int?
+    func foodForCell(at index: Int) -> Food?
     func logOutTapped()
-    func didSelectFood(_ food: Food)
+    func didSelectFood(at index: Int)
 }
 
 protocol HomepagePresenterToInteractor{
     var presenter: HomepageInteractorToPresenter? { get set }
     
-    func loadData()
+    func requestLoadFoodList()
+    func requestUpdateCartForFood(at index: Int, amount: Int)
+    func numberOfFoods() -> Int?
+    func foodForCell(at index: Int) -> Food?
     func requestSignOut()
+    func foodInfo(at index: Int) -> Food?
 }
 
 protocol HomepageInteractorToPresenter{
     
-//    func deleteFromCard(_ foodId: Int)
-    func loadDataSucceed(with foods: [Food])
-    func loadDataFailed()
-    
+    func loadDataSucceed()
+    func requestFailed(with errorMessage: String)
+    func updatedSuccessfully()
     func requestSignOutSucceed()
-    func requestSignOutFailed()
-    
 }
 
 protocol HomepagePresenterToView{
     
-    func sendFetchedData(_ foods: [Food])
-    func failedToSignOut()
-//    func sendFetchedData(_ foods: Food, image: UIImage)
+    func configUI()
+    func showErrorMessage(_ errorMessage: String)
+    func reloadData()
+    func startLoadingAnimation()
+    func stopLoadingAnimation()
 }
 
 
