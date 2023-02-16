@@ -5,8 +5,6 @@
 //  Created by admin on 6.02.2023.
 //
 
-import UIKit
-
 class DetailsRouter: DetailsPresenterToRouter{
     
     var view: DetailsVC?

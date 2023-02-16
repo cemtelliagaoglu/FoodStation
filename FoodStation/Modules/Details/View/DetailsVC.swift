@@ -35,6 +35,7 @@ class DetailsVC: UIViewController{
     let foodNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
+        label.textAlignment = .center
         label.font = UIFont(name: "OpenSans-SemiBold", size: 25)!
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -43,25 +44,22 @@ class DetailsVC: UIViewController{
     let priceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
+        label.textAlignment = .center
         label.font = UIFont(name: "OpenSans-Medium", size: 20)!
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    lazy var addToCartButton: UIButton = {
-        let button = UIButton(type: .custom)
-        let attributedTitle = NSAttributedString(string: "Add To Cart", attributes: [ .font: UIFont(name: "OpenSans-SemiBold", size: 25)!, .foregroundColor: UIColor(named: "bgColor2")!])
-        button.setAttributedTitle(attributedTitle, for: .normal)
-        button.backgroundColor = UIColor(named: "bgColor1")
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(handleAddToCartButtonPressed), for: .touchUpInside)
-        button.layer.cornerRadius = 10
+    lazy var likeButton: UIBarButtonItem = {
+        let image = UIImage(systemName: "heart")
+        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleLikeButtonTapped))
         return button
     }()
     
     lazy var customStepper: CustomStepper = {
         let button = CustomStepper()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.delegate = self
         return button
     }()
     
@@ -69,84 +67,24 @@ class DetailsVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter?.notifyViewDidLoad()
-        
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let food = food else{ return }
+        presenter?.notifyViewWillAppear(for: food)
+    }
     //MARK: - Handlers
-    @objc func handleAddToCartButtonPressed(){
+    @objc func handleLikeButtonTapped(){
         guard let food = self.food else{ return }
-        presenter?.addToCartTapped(for: food, amount: customStepper.itemCount)
+        print("User has liked \(food.foodName)")
     }
-    
-    func addToCart(for username: String,_ food: Food, amount: Int){
-        let baseURL = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php"
-        
-        print("FoodName: \(food.foodName) - FoodImageName: \(food.foodImageName) - FoodPrice: \(food.foodPrice)")
-        let foodPrice = Int(food.foodPrice)!
-        
-        let params: [String: Any] = ["yemek_adi":food.foodName,"yemek_resim_adi":food.foodImageName, "yemek_fiyat": foodPrice,"yemek_siparis_adet": amount,"kullanici_adi": username]
-        
-        AF.request(URL(string: baseURL)!,method: .post, parameters: params).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    print("Adding to Cart Status: \(response.success == 1 ? "Successfull" : "Failed")")
-                    
-                }catch{
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    
-    func loadCart(for username: String){
-        // load Cart
-        let baseURL = "http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php"
-        
-        let params = ["kullanici_adi": username]
-        AF.request(URL(string: baseURL)!,method: .post, parameters: params).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    
-                    print("Success: \(response.success)")
-                    print("Sepet ID: \(response.cart![0].foodIDInCart) - Kullanici Adi: \(response.cart![0].username)")
-                    
-                }catch{
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func deleteItem(){
-        let baseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
-        let sepet_id = 83219
-        // sepeti sil
-        let params1: [String:Any] = ["kullanici_adi": "deneme", "sepet_yemek_id": sepet_id]
-        AF.request(URL(string: baseURL)!,method: .post, parameters: params1).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    print("Success: \(response.success == 1 ? "Success": "Failed")")
-                    
-                }catch{
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    
-    
 }
 //MARK: - PresenterToView Methods
 extension DetailsVC: DetailsPresenterToView{
     func configUI() {
+        navigationItem.rightBarButtonItem = likeButton
         
         view.backgroundColor = UIColor(named: "bgColor2")
-        view.addSubview(addToCartButton)
         view.addSubview(imageView)
         view.addSubview(foodNameLabel)
         view.addSubview(priceLabel)
@@ -154,10 +92,6 @@ extension DetailsVC: DetailsPresenterToView{
         
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            // addToCartButton
-            addToCartButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -16),
-            addToCartButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
-            addToCartButton.widthAnchor.constraint(equalToConstant: 200),
             // imageView
             imageView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 32),
             imageView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 8),
@@ -179,8 +113,11 @@ extension DetailsVC: DetailsPresenterToView{
             customStepper.widthAnchor.constraint(equalToConstant: 150)
         ])
     }
-    func updateView(with food: Food) {
-        
+    func startLoadingAnimation() {
+        customStepper.startLoadingAnimation()
+    }
+    func stopLoadingAnimation() {
+        customStepper.stopLoadingAnimation()
     }
     func setFoodAmount(_ amount: Int) {
         self.customStepper.itemCount = amount
@@ -195,12 +132,7 @@ extension DetailsVC: DetailsPresenterToView{
 //MARK: - CustomStepperDelegate
 extension DetailsVC: CustomStepperDelegate{
     func countDidChange(newValue: Int) {
-        if newValue > 0{
-            // create a new cart with new value and delete old one
-            
-        }else{
-            // delete item from cart
-            
-        }
+        guard let food = food else{ return }
+        presenter?.foodAmountDidChange(for: food, amount: newValue)
     }
 }
