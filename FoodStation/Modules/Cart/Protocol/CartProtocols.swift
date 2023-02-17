@@ -15,22 +15,28 @@ protocol CartViewToPresenter{
     func amountDidChange(at indexPath: IndexPath, newAmount: Int)
     func foodForCell(at index: Int) -> FoodInCart?
     func numberOfItems() -> Int?
+    func shouldUpdatePriceLabel()
+    func deleteAllCartTapped()
     
 }
 protocol CartPresenterToInteractor{
     var presenter: CartInteractorToPresenter? { get set }
     
     func requestLoadCart()
+    func calculatePriceInCart()
     func requestUpdateCart(at indexPath: IndexPath, newAmount: Int)
     func foodInCart(at index: Int) -> FoodInCart?
     func numberOfFoodsInCart() -> Int?
+    func requestDeleteAllCart()
 }
 protocol CartInteractorToPresenter{
     var view: CartPresenterToView? { get set }
     
-    func updatedCart(at indexPath: IndexPath?)
+    func updatedCart()
+    func updatedCart(at indexPath: IndexPath)
     func requestFailed(with errorMessage: String)
     func calculatedTotalPrice(_ price: Int)
+    func deletedAllCartSuccessfully()
 }
 protocol CartPresenterToView{
     
@@ -43,4 +49,5 @@ protocol CartPresenterToView{
 }
 protocol CartPresenterToRouter{
     static func createModule() -> UINavigationController
+    func popVC()
 }

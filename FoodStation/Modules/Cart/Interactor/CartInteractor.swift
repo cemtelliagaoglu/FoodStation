@@ -12,12 +12,6 @@ class CartInteractor: CartPresenterToInteractor{
     var presenter: CartInteractorToPresenter?
     
     var cart: [FoodInCart]?
-    var totPrice: Int?{
-        didSet{
-            guard let totPrice = totPrice else{ return }
-            presenter?.calculatedTotalPrice(totPrice)
-        }
-    }
     
     func foodInCart(at index: Int) -> FoodInCart? {
         return cart?[index]
@@ -33,7 +27,7 @@ class CartInteractor: CartPresenterToInteractor{
             APIService.requestUserCartInfo(for: currentUser) { cart in
                 self.cart = cart
                 self.calculatePriceInCart()
-                self.presenter?.updatedCart(at: nil)
+                self.presenter?.updatedCart()
             }
         }
     }
@@ -64,7 +58,22 @@ class CartInteractor: CartPresenterToInteractor{
             for food in cart{
                 totalPrice += Int(food.foodPrice)! * Int(food.foodAmount)!
             }
-            self.totPrice = totalPrice
+        }
+        presenter?.calculatedTotalPrice(totalPrice)
+    }
+    
+    func requestDeleteAllCart() {
+        if let currentUser = Auth.auth().currentUser?.email{
+            DispatchQueue.main.async {
+                APIService.deleteAllCart(for: currentUser) { error in
+                    if error != nil{
+                        self.presenter?.requestFailed(with: error!.localizedDescription)
+                    }else{
+                        self.cart = nil
+                        self.presenter?.deletedAllCartSuccessfully()
+                    }
+                }
+            }
         }
     }
     

@@ -23,22 +23,28 @@ class CartPresenter: CartViewToPresenter{
     func numberOfItems() -> Int? {
         return interactor?.numberOfFoodsInCart()
     }
+    func shouldUpdatePriceLabel() {
+        interactor?.calculatePriceInCart()
+    }
     
     func amountDidChange(at indexPath: IndexPath, newAmount: Int) {
         interactor?.requestUpdateCart(at: indexPath, newAmount: newAmount)
         view?.startLoadingAnimation(at: indexPath)
     }
+    func deleteAllCartTapped() {
+        interactor?.requestDeleteAllCart()
+    }
 }
 //MARK: - InteractorPresenter Methods
 extension CartPresenter: CartInteractorToPresenter{
     
-    func updatedCart(at indexPath: IndexPath?) {
-        if let indexPath = indexPath{
-            view?.stopLoadingAnimation(at: indexPath)
-            view?.reloadData()
-        }else{
-            view?.reloadData()
-        }
+    func updatedCart() {
+        view?.reloadData()
+    }
+    
+    func updatedCart(at indexPath: IndexPath) {
+        view?.stopLoadingAnimation(at: indexPath)
+        view?.reloadData()
     }
     
     func requestFailed(with errorMessage: String) {
@@ -46,5 +52,9 @@ extension CartPresenter: CartInteractorToPresenter{
     }
     func calculatedTotalPrice(_ price: Int) {
         view?.setPriceLabel(with: "\(price) TL")
+    }
+    func deletedAllCartSuccessfully() {
+        router?.popVC()
+        view?.reloadData()
     }
 }

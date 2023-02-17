@@ -157,6 +157,38 @@ struct APIService{
             }
         }
     }
+    
+    static func deleteItem(for currentUser: String,id: Int, completion: @escaping((Error?) -> ())){
+        // delete food from cart
+        let deleteFoodBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
+        
+        let params: [String:Any] = ["kullanici_adi": currentUser, "sepet_yemek_id": id]
+        AF.request(URL(string: deleteFoodBaseURL)!,method: .post, parameters: params).response(){ response in
+            if let data = response.data{
+                do{
+                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                    completion(nil)
+                    print("Deleting CartID: \(id)...")
+                    print("Deleting: \(response.success == 1 ? "Success": "Failed")")
+                }catch{
+                    completion(error)
+                    print(error)
+                }
+            }
+        }
+    }
+    
+    static func deleteAllCart(for currentUser: String, completion: @escaping((Error?) -> ())){
+        requestUserCartInfo(for: currentUser) { cart in
+            if let cart = cart{
+                for food in cart{
+                    deleteItem(for: currentUser, id: Int(food.foodIDInCart)!){ error in
+                        completion(error)
+                    }
+                }
+            }
+        }
+    }
 
 //    func queryFoodID(foodName: String ) -> Int{
 //        // get food data

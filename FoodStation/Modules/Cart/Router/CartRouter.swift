@@ -39,6 +39,8 @@ class CartRouter: CartPresenterToRouter{
         return navController
     }
     
-    
+    func popVC() {
+        print("Cart Module has popped")
+    }
     
 }

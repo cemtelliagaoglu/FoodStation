@@ -38,11 +38,15 @@ class CartVC: UIViewController{
         let label = UILabel()
         label.font = UIFont(name: "OpenSans-Medium", size: 18)
         label.textColor = .black
-        label.text = "250 ₺"
+        label.text = "0 TL"
         label.numberOfLines = 1
         label.minimumScaleFactor = 0.5
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    lazy var deleteAllCartButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: UIImage(systemName: "trash.fill"), style: .plain, target: self, action: #selector(handleDeleteAllTapped))
+        return button
     }()
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -56,6 +60,14 @@ class CartVC: UIViewController{
     //MARK: - Handlers
     @objc func handleCheckoutTapped(){
         print("Proceed To Checkout Tapped")
+    }
+    @objc func handleDeleteAllTapped(){
+        let alert = UIAlertController(title: "Delete", message: "Are you sure to delete all cart?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .default){ action in
+            self.presenter?.deleteAllCartTapped()
+        })
+        alert.addAction(UIAlertAction(title: "No", style: .cancel))
+        present(alert, animated: true)
     }
 }
 //MARK: - UITableView Methods
@@ -78,10 +90,6 @@ extension CartVC: UITableViewDataSource,UITableViewDelegate{
         cell.customStepper.itemCount = Int(food.foodAmount)!
         return cell
     }
-    
-//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//
-//    }
 }
 //MARK: - PresenterToView Methods
 extension CartVC: CartPresenterToView{
@@ -89,6 +97,7 @@ extension CartVC: CartPresenterToView{
     func configUI() {
         view.backgroundColor = UIColor(named:"bgColor2")
         navigationItem.title = "Cart"
+        navigationItem.rightBarButtonItem = deleteAllCartButton
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -112,9 +121,11 @@ extension CartVC: CartPresenterToView{
     }
     func setPriceLabel(with price: String) {
         totalPriceLabel.text = price
+        totalPriceLabel.isHidden = price == "0 TL"
     }
     func reloadData() {
         tableView.reloadData()
+        presenter?.shouldUpdatePriceLabel()
     }
     func showErrorMessage(_ errorMessage: String) {
         let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
