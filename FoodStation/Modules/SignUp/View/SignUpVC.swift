@@ -11,6 +11,17 @@ class SignUpVC: UIViewController{
     //MARK: - Properties
     var presenter: SignUpViewToPresenter?
     
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "OpenSans-MediumItalic",size: 30)
+        label.textColor = UIColor(named: "bgColor1")
+        label.text = "Sign Up"
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Your Name"
@@ -18,6 +29,10 @@ class SignUpVC: UIViewController{
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
         textField.textColor = UIColor(named: "textColor")
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
         textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
@@ -28,8 +43,12 @@ class SignUpVC: UIViewController{
         textField.placeholder = "Email"
         textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
-        textField.textColor = UIColor(named: "textColor")
+        textField.textColor = UIColor(named: "bgColor1")
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
         textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
@@ -41,6 +60,10 @@ class SignUpVC: UIViewController{
         textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
         textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
@@ -65,7 +88,7 @@ class SignUpVC: UIViewController{
         label.translatesAutoresizingMaskIntoConstraints = false
         let attributedText = NSMutableAttributedString(string: "Already have an account? ",
                                                          attributes: [
-                                                            .foregroundColor: UIColor(named: "textColor")!,
+                                                            .foregroundColor: UIColor(named: "bgColor1")!,
                                                             .font: UIFont(name: "OpenSans-MediumItalic", size: 16)!
                                                          ])
         attributedText.append(NSAttributedString(string: "Tap here to Login",
@@ -126,13 +149,14 @@ extension SignUpVC: SignUpPresenterToView{
     }
     
     func configUI() {
-        view.backgroundColor = UIColor(named: "bgColor3")
+        view.backgroundColor = UIColor(named: "bgColor2")
         
         view.addSubview(signUpButton)
         view.addSubview(passwordTextField)
         view.addSubview(emailTextField)
         view.addSubview(loginLabel)
         view.addSubview(nameTextField)
+        view.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
             // loginButton
@@ -154,7 +178,11 @@ extension SignUpVC: SignUpPresenterToView{
             // nameTextField
             nameTextField.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -16),
             nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            // titleLabel
+            titleLabel.bottomAnchor.constraint(equalTo: nameTextField.topAnchor, constant: -50),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
         
     }
