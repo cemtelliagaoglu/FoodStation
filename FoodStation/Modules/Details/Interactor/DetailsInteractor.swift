@@ -15,15 +15,19 @@ class DetailsInteractor: DetailsPresenterToInteractor{
         if let currentUser = Auth.auth().currentUser?.email {
             DispatchQueue.main.async{
                 APIService.requestUserCartInfo(for: currentUser) { foods in
-                    
-                    guard let foods = foods else{ return }
-                    for foodInCart in foods{
-                        if foodInCart.foodName == food.foodName{
-                            self.presenter?.foodAmountInCart(Int(foodInCart.foodAmount)!)
-                            return
+                    if let cart = foods{
+                        for foodInCart in cart{
+                            if foodInCart.foodName == food.foodName{
+                                self.presenter?.foodAmountInCart(Int(foodInCart.foodAmount)!)
+                                return
+                            }
                         }
+                        // if food is not in cart
+                        self.presenter?.foodAmountInCart(0)
+                    }else{
+                        // if cart is empty
+                        self.presenter?.foodAmountInCart(0)
                     }
-                    self.presenter?.foodAmountInCart(0)
                 }
             }
         }
