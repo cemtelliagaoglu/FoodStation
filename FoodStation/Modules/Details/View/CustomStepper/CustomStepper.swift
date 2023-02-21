@@ -69,9 +69,8 @@ class CustomStepper: UIView{
     }()
     
     lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [decrementButton, countLabel, incrementButton])
+        let stackView = UIStackView(arrangedSubviews: [decrementButton, midContainerStackView, incrementButton])
         stackView.axis = .horizontal
-        updateUI()
         stackView.layer.cornerRadius = 10
         stackView.backgroundColor = .clear
         stackView.spacing = 0
@@ -80,23 +79,23 @@ class CustomStepper: UIView{
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-    lazy var verticalStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [decrementButton, countLabel, incrementButton])
+    
+    lazy var midContainerStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [countLabel, spinner])
         stackView.axis = .vertical
-        updateUI()
-        stackView.layer.cornerRadius = 8
+        stackView.layer.cornerRadius = 10
         stackView.backgroundColor = .clear
         stackView.spacing = 0
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalSpacing
         stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    let spinner: UIActivityIndicatorView = {
+    lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView()
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.hidesWhenStopped = true
+        spinner.isHidden = true
         spinner.color = UIColor(named: "bgColor1")
         return spinner
     }()
@@ -104,7 +103,7 @@ class CustomStepper: UIView{
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configUI()
+//        configUI()
     }
     
     required init?(coder: NSCoder) {
@@ -114,55 +113,52 @@ class CustomStepper: UIView{
 
     //MARK: - Handlers
     func configUI(){
-        addSubview(spinner)
+        addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+        ])
         if viewingMode == .vertical{
-            addSubview(verticalStackView)
             NSLayoutConstraint.activate([
-                verticalStackView.topAnchor.constraint(equalTo: topAnchor),
-                verticalStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                verticalStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                verticalStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-                decrementButton.widthAnchor.constraint(equalTo: verticalStackView.widthAnchor),
-                incrementButton.widthAnchor.constraint(equalTo: verticalStackView.widthAnchor),
-                incrementButton.heightAnchor.constraint(equalTo: verticalStackView.heightAnchor, multiplier: 0.33),
-                spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-                spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+                incrementButton.widthAnchor.constraint(equalToConstant: 40),
+                incrementButton.heightAnchor.constraint(equalToConstant: 40),
+                decrementButton.widthAnchor.constraint(equalToConstant: 40),
+                decrementButton.heightAnchor.constraint(equalToConstant: 40),
             ])
-
         }else{
-            addSubview(stackView)
             NSLayoutConstraint.activate([
-                stackView.topAnchor.constraint(equalTo: topAnchor),
-                stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-                stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-                stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
                 decrementButton.heightAnchor.constraint(equalTo: stackView.heightAnchor),
                 incrementButton.heightAnchor.constraint(equalTo: stackView.heightAnchor),
-                spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
-                spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
             ])
         }
-        
     }
+
     func updateUI(){
         
         let image = itemCount > 1 ? UIImage(systemName: "minus"): UIImage(systemName: "trash")
         decrementButton.setImage(image, for: .normal)
         if viewingMode == .vertical{
+            stackView.axis = .vertical
+            midContainerStackView.axis = .horizontal
             incrementButton.setTitle(nil, for: .normal)
             incrementButton.setImage(UIImage(systemName: "plus"), for: .normal)
-            let isHidden = itemCount > 0
-            decrementButton.isHidden = !isHidden
-            countLabel.isHidden = !isHidden
+            let hasItem = itemCount > 0
+            decrementButton.isHidden = !hasItem
+            midContainerStackView.isHidden = !hasItem
         }else{
+            stackView.axis = .horizontal
+            midContainerStackView.axis = .vertical
+            let hasItem = itemCount > 0
+            decrementButton.isHidden = !hasItem
+            midContainerStackView.isHidden = !hasItem
             if itemCount == 0{
-                decrementButton.isHidden = true
-                countLabel.isHidden = true
                 incrementButton.setTitle("Add To Cart", for: .normal)
                 incrementButton.setImage(nil, for: .normal)
             }else{
-                decrementButton.isHidden = false
-                countLabel.isHidden = false
                 incrementButton.setTitle("", for: .normal)
                 incrementButton.setImage(UIImage(systemName: "plus"), for: .normal)
             }
@@ -171,11 +167,15 @@ class CustomStepper: UIView{
     func startLoadingAnimation(){
         incrementButton.isUserInteractionEnabled = false
         decrementButton.isUserInteractionEnabled = false
+        countLabel.isHidden = true
+        spinner.isHidden = false
         spinner.startAnimating()
     }
     func stopLoadingAnimation(){
         incrementButton.isUserInteractionEnabled = true
         decrementButton.isUserInteractionEnabled = true
+        countLabel.isHidden = false
+        spinner.isHidden = true
         spinner.stopAnimating()
     }
     @objc func handleLeftButtonPressed(){

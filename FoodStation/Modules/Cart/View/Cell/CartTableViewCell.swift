@@ -59,6 +59,7 @@ class CartTableViewCell: UITableViewCell{
     
     let customStepper: CustomStepper = {
         let stepper = CustomStepper()
+        stepper.viewingMode = .horizontal
         stepper.translatesAutoresizingMaskIntoConstraints = false
         return stepper
     }()
@@ -96,7 +97,6 @@ class CartTableViewCell: UITableViewCell{
             customStepper.leadingAnchor.constraint(equalTo: verticalStackView.trailingAnchor, constant: 8),
             customStepper.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             customStepper.widthAnchor.constraint(equalToConstant: 100),
-            customStepper.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 }
