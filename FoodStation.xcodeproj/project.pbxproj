@@ -29,6 +29,7 @@
 		841911372991A0590005F6D5 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8419112B2991A0590005F6D5 /* OpenSans-LightItalic.ttf */; };
 		841911382991A0590005F6D5 /* OpenSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8419112C2991A0590005F6D5 /* OpenSans-MediumItalic.ttf */; };
 		841911392991A0590005F6D5 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8419112D2991A0590005F6D5 /* OpenSans-Regular.ttf */; };
+		841AA5DD29A3CF2C0055368A /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841AA5DC29A3CF2C0055368A /* FirebaseService.swift */; };
 		8431681D29928C0C00908312 /* CartResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8431681C29928C0B00908312 /* CartResponse.swift */; };
 		843168252992A11C00908312 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843168242992A11C00908312 /* LoginVC.swift */; };
 		843168272992A12700908312 /* LoginPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843168262992A12700908312 /* LoginPresenter.swift */; };
@@ -80,6 +81,7 @@
 		8419112B2991A0590005F6D5 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
 		8419112C2991A0590005F6D5 /* OpenSans-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		8419112D2991A0590005F6D5 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		841AA5DC29A3CF2C0055368A /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		8431681C29928C0B00908312 /* CartResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartResponse.swift; sourceTree = "<group>"; };
 		843168242992A11C00908312 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		843168262992A12700908312 /* LoginPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginPresenter.swift; sourceTree = "<group>"; };
@@ -557,6 +559,7 @@
 			isa = PBXGroup;
 			children = (
 				84D4EDAA29930651006D7EE9 /* APIService.swift */,
+				841AA5DC29A3CF2C0055368A /* FirebaseService.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -683,6 +686,7 @@
 				84D4EDA02993039A006D7EE9 /* CartVC.swift in Sources */,
 				841910F8299186A50005F6D5 /* FoodCell.swift in Sources */,
 				8481D3EA2995138E0065D7CB /* ProfileRouter.swift in Sources */,
+				841AA5DD29A3CF2C0055368A /* FirebaseService.swift in Sources */,
 				843168272992A12700908312 /* LoginPresenter.swift in Sources */,
 				84A305B22991848500FE9B8F /* SceneDelegate.swift in Sources */,
 				8431682D2992A18800908312 /* LoginProtocols.swift in Sources */,

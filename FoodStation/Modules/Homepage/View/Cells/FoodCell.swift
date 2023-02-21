@@ -8,20 +8,35 @@
 import UIKit
 import Kingfisher
 
+protocol FoodCellDelegate{
+    func foodAmountDidChange(indexPath: IndexPath, newValue: Int)
+    func likeButtonTapped(indexPath: IndexPath ,didLike: Bool)
+}
+
 class FoodCell: UICollectionViewCell{
     //MARK: - Properties
+    
+    var delegate: FoodCellDelegate?
     
     var food: Food?{
         didSet{
             guard let food = food else{ return }
             nameLabel.text = food.foodName
-            priceLabel.text = food.foodPrice + "₺"
+            priceLabel.text = food.foodPrice + " TL"
             guard let imageURLString = food.foodImageURL else{ return }
             DispatchQueue.main.async {
                 self.imageView.kf.setImage(with: URL(string: imageURLString)!)
             }
         }
     }
+    
+    var didLike: Bool = false{
+        didSet{
+            updateUI()
+        }
+    }
+    
+    var indexPath: IndexPath?
     
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -84,6 +99,18 @@ class FoodCell: UICollectionViewCell{
         return stepper
     }()
     
+    lazy var likeButton: UIImageView = {
+        let view = UIImageView(image: UIImage(systemName: "heart")!)
+        view.contentMode = .scaleAspectFit
+        view.tintColor = UIColor(named: "bgColor1")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLikeTapped))
+        tapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGesture)
+        view.isUserInteractionEnabled = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     //MARK: - Lifecycle
     
     override init(frame: CGRect) {
@@ -95,29 +122,52 @@ class FoodCell: UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     //MARK: - Handlers
+    @objc func handleLikeTapped(){
+        guard let indexPath = indexPath else{
+            print("index for cell not set")
+            return
+        }
+        delegate?.likeButtonTapped(indexPath: indexPath, didLike: !didLike)
+    }
     
     func configUI(){
         
         addSubview(mainStackView)
         addSubview(customStepper)
+        addSubview(likeButton)
         
         NSLayoutConstraint.activate([
             // mainStackView
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
+            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             // customStepper
             customStepper.topAnchor.constraint(equalTo: topAnchor),
-            customStepper.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
-            customStepper.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.7),
-            customStepper.widthAnchor.constraint(equalToConstant: 30)
+            customStepper.trailingAnchor.constraint(equalTo: trailingAnchor),
+            // likeButton
+            likeButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            likeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            likeButton.heightAnchor.constraint(equalToConstant: 30),
+            likeButton.widthAnchor.constraint(equalToConstant: 35)
         ])
-        
+        layer.borderWidth = 0.5
+        layer.cornerRadius = 10
+        layer.borderColor = UIColor(named: "bgColor1")!.cgColor
     }
     
-    @objc func handleAddButtonTapped(){
-        print("Add Button Tapped")
+    func updateUI(){
+        let image = didLike ? UIImage(systemName: "heart.fill"):UIImage(systemName: "heart")
+        likeButton.image = image
     }
-    
+}
+//MARK: - CustomStepper Delegate
+extension FoodCell: CustomStepperDelegate{
+    func countDidChange(newValue: Int) {
+        guard let indexPath = indexPath else{
+            print("index for cell not set")
+            return
+        }
+        delegate?.foodAmountDidChange(indexPath: indexPath, newValue: newValue)
+    }
 }

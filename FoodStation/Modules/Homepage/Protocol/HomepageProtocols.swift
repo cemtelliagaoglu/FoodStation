@@ -13,11 +13,13 @@ protocol HomepageViewToPresenter{
     var router: HomepagePresenterToRouter? { get set }
     
     func notifyViewDidLoad()
-    func updateFoodInCart(at index: Int, amount: Int)
+    func updateFoodInCart(at indexPath: IndexPath, amount: Int)
     func numberOfItems() -> Int?
     func foodForCell(at index: Int) -> Food?
     func logOutTapped()
     func didSelectFood(at index: Int)
+    func didLikeFood(at index: Int, didLike: Bool)
+    func foodAmountForCell(at index: Int) -> Int
 }
 
 protocol HomepagePresenterToInteractor{
@@ -29,6 +31,8 @@ protocol HomepagePresenterToInteractor{
     func foodForCell(at index: Int) -> Food?
     func requestSignOut()
     func foodInfo(at index: Int) -> Food?
+    func updateFoodLike(at index: Int, didLike: Bool)
+    func requestFoodAmount(at index: Int)
 }
 
 protocol HomepageInteractorToPresenter{
@@ -36,6 +40,7 @@ protocol HomepageInteractorToPresenter{
     func loadDataSucceed()
     func requestFailed(with errorMessage: String)
     func updatedSuccessfully()
+    func updatedSuccessfully(at indexPath: IndexPath)
     func requestSignOutSucceed()
 }
 
@@ -44,8 +49,8 @@ protocol HomepagePresenterToView{
     func configUI()
     func showErrorMessage(_ errorMessage: String)
     func reloadData()
-    func startLoadingAnimation()
-    func stopLoadingAnimation()
+    func startLoadingAnimation(at indexPath: IndexPath)
+    func stopLoadingAnimation(at indexPath: IndexPath)
 }
 
 

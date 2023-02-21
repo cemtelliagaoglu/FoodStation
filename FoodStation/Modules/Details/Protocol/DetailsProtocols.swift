@@ -13,6 +13,8 @@ protocol DetailsViewToPresenter{
     func notifyViewWillAppear(for food: Food)
     func foodDidSet(_ food: Food)
     func foodAmountDidChange(for food: Food, amount: Int)
+    func didLikeFood(_ food: Food, didLike: Bool)
+    func backButtonTapped()
 }
 
 protocol DetailsPresenterToInteractor{
@@ -20,6 +22,7 @@ protocol DetailsPresenterToInteractor{
     
     func requestUpdateCart(food: Food, amount: Int)
     func requestFoodAmountInCart(for food: Food)
+    func requestUpdateFoodLike(_ food: Food, didLike: Bool)
 }
 
 protocol DetailsInteractorToPresenter{
@@ -28,6 +31,7 @@ protocol DetailsInteractorToPresenter{
     func updatedCartSuccessfuly()
     func requestFailed(withErrorMessage message: String)
     func foodAmountInCart(_ amount: Int)
+    func updatedFoodLikeSuccessfully(didLike: Bool)
 }
 
 protocol DetailsPresenterToView{
@@ -36,6 +40,7 @@ protocol DetailsPresenterToView{
     func showError(_ message: String)
     func startLoadingAnimation()
     func stopLoadingAnimation()
+    func setLikeButton(didLike: Bool)
 }
 
 

@@ -43,4 +43,15 @@ class DetailsInteractor: DetailsPresenterToInteractor{
             }
         }
     }
+    func requestUpdateFoodLike(_ food: Food, didLike: Bool) {
+        if let currentUID = Auth.auth().currentUser?.uid{
+            FirebaseService.requestUpdateFoodLike(for: currentUID, foodID: food.foodId, didLike: didLike) { error in
+                if error != nil{
+                    self.presenter?.requestFailed(withErrorMessage: error!.localizedDescription)
+                }else{
+                    self.presenter?.updatedFoodLikeSuccessfully(didLike: didLike)
+                }
+            }
+        }
+    }
 }

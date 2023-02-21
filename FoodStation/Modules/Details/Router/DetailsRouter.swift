@@ -25,6 +25,6 @@ class DetailsRouter: DetailsPresenterToRouter{
     }
     
     func popVC() {
-        view?.navigationController?.popToRootViewController(animated: true)
+        view?.navigationController?.popViewController(animated: true)
     }
 }

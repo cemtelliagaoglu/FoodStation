@@ -45,7 +45,6 @@ class HomepageVC: UIViewController {
         // add alert action
         alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { _ in
             self.presenter?.logOutTapped()
-//            self.presenter?.logOutTapped(from: navController)
         }))
             
         alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -60,8 +59,15 @@ extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: foodCellIdentifier, for: indexPath) as! FoodCell
-        
-        cell.food = presenter?.foodForCell(at: indexPath.row)
+        guard let food = presenter?.foodForCell(at: indexPath.row) else{ return cell}
+        if food.didLike{
+            cell.didLike = true
+        }else{
+            cell.didLike = false
+        }
+        cell.delegate = self
+        cell.indexPath = indexPath
+        cell.food = food
         return cell
     }
     
@@ -90,8 +96,13 @@ extension HomepageVC: HomepagePresenterToView{
     
     func configUI() {
         view.backgroundColor = UIColor(named: "bgColor1")
-        navigationItem.title = "FoodStation"
-        navigationItem.leftBarButtonItem = logOutButton
+//        navigationItem.title = "FoodStation"
+//        navigationItem.leftBarButtonItem = logOutButton
+        let titleLabel = UILabel()
+        let textAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor(named: "bgColor2")!,
+            .font: UIFont(name: "OpenSans-MediumItalic", size: 25)!]
+        titleLabel.attributedText = NSAttributedString(string: "FoodStation", attributes: textAttributes)
+        navigationItem.titleView = titleLabel
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(FoodCell.self, forCellWithReuseIdentifier: foodCellIdentifier)
@@ -115,11 +126,22 @@ extension HomepageVC: HomepagePresenterToView{
         alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         present(alert, animated: true)
     }
-    func startLoadingAnimation() {
-        
+    func startLoadingAnimation(at indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? FoodCell
+        cell?.customStepper.startLoadingAnimation()
     }
-    func stopLoadingAnimation() {
-        
+    func stopLoadingAnimation(at indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as? FoodCell
+        cell?.customStepper.stopLoadingAnimation()
     }
     
+}
+//MARK: - FoodCellDelegate
+extension HomepageVC: FoodCellDelegate{
+    func foodAmountDidChange(indexPath: IndexPath, newValue: Int) {
+        
+    }
+    func likeButtonTapped(indexPath: IndexPath, didLike: Bool) {
+        presenter?.didLikeFood(at: indexPath.row, didLike: didLike)
+    }
 }

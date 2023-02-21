@@ -21,7 +21,7 @@ struct Food: Codable{
     let foodImageName: String
     let foodPrice: String
     var foodImageURL: String?
-        
+    var didLike: Bool = false
     
     enum CodingKeys: String,CodingKey{
         case foodId = "yemek_id"

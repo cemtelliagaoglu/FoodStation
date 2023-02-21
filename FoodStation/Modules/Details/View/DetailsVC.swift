@@ -7,7 +7,6 @@
 
 import UIKit
 import Kingfisher
-import Alamofire
 
 class DetailsVC: UIViewController{
     //MARK: - Properties
@@ -17,9 +16,10 @@ class DetailsVC: UIViewController{
     var food: Food?{
         didSet{
             guard let food = food else { return }
+            presenter?.didLikeFood(food, didLike: food.didLike)
             imageView.kf.setImage(with: URL(string: food.foodImageURL!))
             foodNameLabel.text = food.foodName
-            priceLabel.text = food.foodPrice + " ₺"
+            priceLabel.text = food.foodPrice + " TL"
             presenter?.foodDidSet(food)
         }
     }
@@ -50,15 +50,25 @@ class DetailsVC: UIViewController{
         return label
     }()
     
-    lazy var likeButton: UIBarButtonItem = {
+    lazy var likeButton: UIButton = {
+        let button = UIButton(type: .custom)
         let image = UIImage(systemName: "heart")
-        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleLikeButtonTapped))
+        button.setBackgroundImage(image, for: .normal)
+        button.addTarget(self, action: #selector(handleLikeButtonTapped), for: .touchUpInside)
+        button.tintColor = .white
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 35).isActive = true
         return button
+    }()
+    lazy var likeBarButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem(customView: likeButton)
+        return barButton
     }()
     
     lazy var customStepper: CustomStepper = {
         let button = CustomStepper()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.viewingMode = .horizontal
         button.delegate = self
         return button
     }()
@@ -77,12 +87,19 @@ class DetailsVC: UIViewController{
     @objc func handleLikeButtonTapped(){
         guard let food = self.food else{ return }
         print("User has liked \(food.foodName)")
+        self.food!.didLike = !self.food!.didLike
+        presenter?.didLikeFood(food, didLike: !food.didLike)
+    }
+    @objc func handleBackButtonTapped(){
+        presenter?.backButtonTapped()
     }
 }
 //MARK: - PresenterToView Methods
 extension DetailsVC: DetailsPresenterToView{
     func configUI() {
-        navigationItem.rightBarButtonItem = likeButton
+        navigationItem.rightBarButtonItem = likeBarButton
+        navigationItem.title = "Details"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(handleBackButtonTapped))
         
         view.backgroundColor = UIColor(named: "bgColor2")
         view.addSubview(imageView)
@@ -126,6 +143,11 @@ extension DetailsVC: DetailsPresenterToView{
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Close", style: .cancel))
         navigationController?.present(alert, animated: true)
+    }
+    func setLikeButton(didLike: Bool) {
+        let image = didLike ? UIImage(systemName: "heart.fill"): UIImage(systemName: "heart")
+        likeButton.setBackgroundImage(image, for: .normal)
+        
     }
     
 }

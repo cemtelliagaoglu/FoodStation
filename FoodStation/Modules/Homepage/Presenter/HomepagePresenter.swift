@@ -27,14 +27,19 @@ class HomepagePresenter: HomepageViewToPresenter{
         guard let food = interactor?.foodInfo(at: index)else{ return }
         router?.pushToDetailsVC(for: food)
     }
-    func updateFoodInCart(at index: Int, amount: Int) {
-        interactor?.requestUpdateCartForFood(at: index, amount: amount)
-        view?.startLoadingAnimation()
+    func updateFoodInCart(at indexPath: IndexPath, amount: Int) {
+        interactor?.requestUpdateCartForFood(at: indexPath.row, amount: amount)
+        view?.startLoadingAnimation(at: indexPath)
     }
     func logOutTapped() {
         interactor?.requestSignOut()
     }
-   
+    func didLikeFood(at index: Int, didLike: Bool) {
+        interactor?.updateFoodLike(at: index, didLike: didLike)
+    }
+    func foodAmountForCell(at index: Int) -> Int {
+        return 1
+    }
 }
 //MARK: - InteractorToPresenter Methods
 extension HomepagePresenter: HomepageInteractorToPresenter{
@@ -44,7 +49,9 @@ extension HomepagePresenter: HomepageInteractorToPresenter{
     }
     func updatedSuccessfully() {
         view?.reloadData()
-        view?.stopLoadingAnimation()
+    }
+    func updatedSuccessfully(at indexPath: IndexPath) {
+        view?.stopLoadingAnimation(at: indexPath)
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)

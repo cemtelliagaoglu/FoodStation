@@ -30,6 +30,12 @@ class DetailsPresenter: DetailsViewToPresenter{
             interactor?.requestUpdateCart(food: food, amount: amount)
         }
     }
+    func didLikeFood(_ food: Food, didLike: Bool) {
+        interactor?.requestUpdateFoodLike(food, didLike: didLike)
+    }
+    func backButtonTapped() {
+        router?.popVC()
+    }
     
 }
 //MARK: - InteractorToPresenter Methods
@@ -45,5 +51,8 @@ extension DetailsPresenter: DetailsInteractorToPresenter{
     
     func requestFailed(withErrorMessage message: String) {
         view?.showError(message)
+    }
+    func updatedFoodLikeSuccessfully(didLike: Bool) {
+        view?.setLikeButton(didLike: didLike)
     }
 }
