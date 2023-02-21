@@ -1,0 +1,42 @@
+//
+//  LikeProtocols.swift
+//  FoodStation
+//
+//  Created by admin on 21.02.2023.
+//
+
+import UIKit
+
+protocol LikeViewToPresenter{
+    var interactor: LikePresenterToInteractor? { get set }
+    var router: LikePresenterToRouter? { get set }
+    var view: LikePresenterToView? { get set }
+    
+    func notifyViewDidLoad()
+    
+    func didSelectFood(at index: Int)
+    func numberOfItems() -> Int?
+}
+
+protocol LikePresenterToInteractor{
+    var presenter: LikeInteractorToPresenter? { get set }
+    func requestLoadingLikedFoods()
+    func numberOfFoods() -> Int?
+    
+}
+protocol LikeInteractorToPresenter{
+    func loadedLikedFoodsSuccessfully()
+    func requestFailed(with errorMessage: String)
+}
+
+protocol LikePresenterToView{
+    
+    func configUI()
+    func reloadData()
+    func showErrorMessage(_ errorMessage: String)
+}
+
+protocol LikePresenterToRouter{
+    static func createModule() -> UINavigationController
+    
+}

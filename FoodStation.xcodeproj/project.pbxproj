@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8413C81529A4F82400EFBC2B /* LikeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413C81429A4F82400EFBC2B /* LikeVC.swift */; };
+		8413C81729A4F82C00EFBC2B /* LikePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413C81629A4F82C00EFBC2B /* LikePresenter.swift */; };
+		8413C81929A4F83200EFBC2B /* LikeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413C81829A4F83200EFBC2B /* LikeInteractor.swift */; };
+		8413C81B29A4F85600EFBC2B /* LikeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413C81A29A4F85600EFBC2B /* LikeRouter.swift */; };
+		8413C81D29A4F85B00EFBC2B /* LikeProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8413C81C29A4F85B00EFBC2B /* LikeProtocols.swift */; };
 		841910EC299186420005F6D5 /* HomepagePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841910EB299186420005F6D5 /* HomepagePresenter.swift */; };
 		841910EE2991864B0005F6D5 /* HomepageInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841910ED2991864B0005F6D5 /* HomepageInteractor.swift */; };
 		841910F0299186510005F6D5 /* HomepageRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841910EF299186510005F6D5 /* HomepageRouter.swift */; };
@@ -63,6 +68,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8413C81429A4F82400EFBC2B /* LikeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeVC.swift; sourceTree = "<group>"; };
+		8413C81629A4F82C00EFBC2B /* LikePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePresenter.swift; sourceTree = "<group>"; };
+		8413C81829A4F83200EFBC2B /* LikeInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeInteractor.swift; sourceTree = "<group>"; };
+		8413C81A29A4F85600EFBC2B /* LikeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeRouter.swift; sourceTree = "<group>"; };
+		8413C81C29A4F85B00EFBC2B /* LikeProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeProtocols.swift; sourceTree = "<group>"; };
 		841910EB299186420005F6D5 /* HomepagePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepagePresenter.swift; sourceTree = "<group>"; };
 		841910ED2991864B0005F6D5 /* HomepageInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageInteractor.swift; sourceTree = "<group>"; };
 		841910EF299186510005F6D5 /* HomepageRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageRouter.swift; sourceTree = "<group>"; };
@@ -131,9 +141,62 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8413C80E29A4F80000EFBC2B /* Like */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81329A4F81B00EFBC2B /* Protocol */,
+				8413C81229A4F81600EFBC2B /* Router */,
+				8413C81129A4F81300EFBC2B /* Interactor */,
+				8413C81029A4F81000EFBC2B /* Presenter */,
+				8413C80F29A4F80A00EFBC2B /* View */,
+			);
+			path = Like;
+			sourceTree = "<group>";
+		};
+		8413C80F29A4F80A00EFBC2B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81429A4F82400EFBC2B /* LikeVC.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8413C81029A4F81000EFBC2B /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81629A4F82C00EFBC2B /* LikePresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		8413C81129A4F81300EFBC2B /* Interactor */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81829A4F83200EFBC2B /* LikeInteractor.swift */,
+			);
+			path = Interactor;
+			sourceTree = "<group>";
+		};
+		8413C81229A4F81600EFBC2B /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81A29A4F85600EFBC2B /* LikeRouter.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		8413C81329A4F81B00EFBC2B /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				8413C81C29A4F85B00EFBC2B /* LikeProtocols.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		841910E3299186000005F6D5 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				8413C80E29A4F80000EFBC2B /* Like */,
 				8431682E2992A1CB00908312 /* SignUp */,
 				8431681E29929FD500908312 /* Login */,
 				8419112029919A040005F6D5 /* Cart */,
@@ -663,6 +726,7 @@
 				8481D3E42995137A0065D7CB /* ProfileVC.swift in Sources */,
 				841910F0299186510005F6D5 /* HomepageRouter.swift in Sources */,
 				84D4EDA8299303B4006D7EE9 /* CartProtocols.swift in Sources */,
+				8413C81D29A4F85B00EFBC2B /* LikeProtocols.swift in Sources */,
 				843168292992A17D00908312 /* LoginInteractor.swift in Sources */,
 				8481D3E6299513800065D7CB /* ProfilePresenter.swift in Sources */,
 				841910EC299186420005F6D5 /* HomepagePresenter.swift in Sources */,
@@ -679,8 +743,12 @@
 				8431681D29928C0C00908312 /* CartResponse.swift in Sources */,
 				84D4EDA6299303AE006D7EE9 /* CartRouter.swift in Sources */,
 				841910F5299186910005F6D5 /* Food.swift in Sources */,
+				8413C81729A4F82C00EFBC2B /* LikePresenter.swift in Sources */,
+				8413C81929A4F83200EFBC2B /* LikeInteractor.swift in Sources */,
+				8413C81B29A4F85600EFBC2B /* LikeRouter.swift in Sources */,
 				8481D3F9299526570065D7CB /* SignUpRouter.swift in Sources */,
 				841910EE2991864B0005F6D5 /* HomepageInteractor.swift in Sources */,
+				8413C81529A4F82400EFBC2B /* LikeVC.swift in Sources */,
 				8481D3F5299526320065D7CB /* SignUpPresenter.swift in Sources */,
 				8419110B299188500005F6D5 /* DetailsInteractor.swift in Sources */,
 				84D4EDA02993039A006D7EE9 /* CartVC.swift in Sources */,

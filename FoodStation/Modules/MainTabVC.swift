@@ -40,12 +40,12 @@ class MainTabVC: UITabBarController{
         let homepageVC = HomepageRouter.createModule()
         homepageVC.tabBarItem.image = UIImage(systemName: "house.fill")
         
-        let profileVC = ProfileRouter.createModule()
-        profileVC.tabBarItem.image = UIImage(systemName: "person.fill")
+        let likeVC = LikeRouter.createModule()
+        likeVC.tabBarItem.image = UIImage(systemName: "heart.fill")
         
         let cartVC = CartRouter.createModule()
         cartVC.tabBarItem.image = UIImage(systemName: "cart.fill")
-        self.viewControllers = [homepageVC, cartVC, profileVC]
+        self.viewControllers = [homepageVC, cartVC, likeVC]
         
     }
     
