@@ -92,9 +92,10 @@ class FoodCell: UICollectionViewCell{
         return stackView
     }()
     
-    let customStepper: CustomStepper = {
+    lazy var customStepper: CustomStepper = {
         let stepper = CustomStepper()
         stepper.viewingMode = .vertical
+        stepper.delegate = self
         stepper.translatesAutoresizingMaskIntoConstraints = false
         return stepper
     }()
