@@ -33,126 +33,150 @@ struct APIService{
         }
     }
     
-    static func requestUserCartInfo(for currentUser: String,completion: @escaping(([FoodInCart]?) -> ())) {
-        // try to load user's cart
-        let foodsInCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php"
-        
-        let params = ["kullanici_adi": currentUser]
-        AF.request(URL(string: foodsInCartBaseURL)!,method: .post, parameters: params).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    completion(response.cart!)
-                    print("Success: \(response.success)")
-                    for food in response.cart!{
-                        print("Sepet ID: \(food.foodIDInCart) - Yemek Ad: \(food.foodName) - Yemek Adet: \(food.foodAmount) - Kullanici Adi: \(food.username)")
-                    }
-                }catch{
-                    completion(nil)
-                    print(error.localizedDescription)
-                }
-            }
-        }
-    }
-    
-    static func requestAddToCart(for currentUser: String,food: Food, amount: Int, completion: @escaping((String) -> ())) {
-        // check if food exists in the cart, if yes delete from the cart
-        // create a new cart with given amount of food
-        let addToCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php"
-        
-        self.deleteFoodIfInCart(for: currentUser, food)
-        if amount > 0{
-            
-            let params: [String: Any] = ["yemek_adi":food.foodName,"yemek_resim_adi":food.foodImageName, "yemek_fiyat": Int(food.foodPrice)!,"yemek_siparis_adet": amount,"kullanici_adi": currentUser]
-            
-            AF.request(URL(string: addToCartBaseURL)!,method: .post, parameters: params).response(){ response in
-                if let data = response.data{
-                    do{
-                        let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                        if response.success == 1{
-                            completion("success")
-                        }else{
-                            completion(response.message!)
+    static func requestUserCartInfo(completion: @escaping(([FoodInCart]?) -> ())) {
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                // try to load user's cart
+                let foodsInCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettekiYemekleriGetir.php"
+                
+                let params = ["kullanici_adi": currentUser]
+                AF.request(URL(string: foodsInCartBaseURL)!,method: .post, parameters: params).response(){ response in
+                    if let data = response.data{
+                        do{
+                            let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                            completion(response.cart!)
+                            print("Success: \(response.success)")
+                            for food in response.cart!{
+                                print("Sepet ID: \(food.foodIDInCart) - Yemek Ad: \(food.foodName) - Yemek Adet: \(food.foodAmount) - Kullanici Adi: \(food.username)")
+                            }
+                        }catch{
+                            completion(nil)
+                            print(error.localizedDescription)
                         }
-                        print("Adding to Cart Status: \(response.success == 1 ? "Successfull" : "Failed")")
-                    }catch{
-                        print(error)
                     }
                 }
             }
         }
+       
     }
     
-    static func requestAddToCart(for currentUser: String,foodInCart: FoodInCart, amount: Int, completion: @escaping((String) -> ())){
-        // delete existing foodInCart,
-        // create a new cart with given amount of food
-        let addToCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php"
+    static func requestAddToCart(food: Food, amount: Int, completion: @escaping((String) -> ())) {
+        // check userEmailAddress
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                // check if food exists in the cart, if yes delete from the cart
+                // create a new cart with given amount of food
+                let addToCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php"
+                
+                self.deleteFoodIfInCart(food)
+                if amount > 0{
+                    
+                    let params: [String: Any] = ["yemek_adi":food.foodName,"yemek_resim_adi":food.foodImageName, "yemek_fiyat": Int(food.foodPrice)!,"yemek_siparis_adet": amount,"kullanici_adi": currentUser]
+                    
+                    AF.request(URL(string: addToCartBaseURL)!,method: .post, parameters: params).response(){ response in
+                        if let data = response.data{
+                            do{
+                                let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                                if response.success == 1{
+                                    completion("success")
+                                }else{
+                                    completion(response.message!)
+                                }
+                                print("Adding to Cart Status: \(response.success == 1 ? "Successfull" : "Failed")")
+                            }catch{
+                                print(error)
+                            }
+                        }
+                    }
+                }
+            }
+        }
         
-        self.deleteItem(foodIDInCart: Int(foodInCart.foodIDInCart)!, for: currentUser)
+    }
+    
+    static func requestAddToCart(foodInCart: FoodInCart, amount: Int, completion: @escaping((String) -> ())){
+        
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                // delete existing foodInCart,
+                // create a new cart with given amount of food
+                let addToCartBaseURL = "http://kasimadalan.pe.hu/yemekler/sepeteYemekEkle.php"
+                
+                self.deleteItem(foodIDInCart: Int(foodInCart.foodIDInCart)!)
 
-        if amount > 0{
-            // create new cart with updated amount of food
-            let params: [String: Any] = ["yemek_adi":foodInCart.foodName,"yemek_resim_adi":foodInCart.foodImageName, "yemek_fiyat": Int(foodInCart.foodPrice)!,"yemek_siparis_adet": amount,"kullanici_adi": currentUser]
-            
-            AF.request(URL(string: addToCartBaseURL)!,method: .post, parameters: params).response(){ response in
-                if let data = response.data{
-                    do{
-                        let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                        if response.success == 1{
-                            completion("success")
-                        }else{
-                            completion(response.message!)
+                if amount > 0{
+                    // create new cart with updated amount of food
+                    let params: [String: Any] = ["yemek_adi":foodInCart.foodName,"yemek_resim_adi":foodInCart.foodImageName, "yemek_fiyat": Int(foodInCart.foodPrice)!,"yemek_siparis_adet": amount,"kullanici_adi": currentUser]
+                    
+                    AF.request(URL(string: addToCartBaseURL)!,method: .post, parameters: params).response(){ response in
+                        if let data = response.data{
+                            do{
+                                let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                                if response.success == 1{
+                                    completion("success")
+                                }else{
+                                    completion(response.message!)
+                                }
+                                print("Adding to Cart Status: \(response.success == 1 ? "Successfull" : "Failed")")
+                            }catch{
+                                print(error)
+                            }
                         }
-                        print("Adding to Cart Status: \(response.success == 1 ? "Successfull" : "Failed")")
-                    }catch{
-                        print(error)
                     }
                 }
             }
         }
     }
     
-    static func deleteItem(foodIDInCart: Int, for username: String){
-        let baseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
-        
-        let params: [String:Any] = ["kullanici_adi": username, "sepet_yemek_id": foodIDInCart]
-        AF.request(URL(string: baseURL)!,method: .post, parameters: params).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    print("Deleting Status: \(response.success == 1 ? "Success": "Failed")")
-                }catch{
-                    print(error)
+    static func deleteItem(foodIDInCart: Int){
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                let baseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
+                
+                let params: [String:Any] = ["kullanici_adi": currentUser, "sepet_yemek_id": foodIDInCart]
+                AF.request(URL(string: baseURL)!,method: .post, parameters: params).response(){ response in
+                    if let data = response.data{
+                        do{
+                            let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                            print("Deleting Status: \(response.success == 1 ? "Success": "Failed")")
+                        }catch{
+                            print(error)
+                        }
+                    }
                 }
             }
         }
     }
-    static func deleteFoodIfInCart(for currentUser: String,_ food: Food){
+    static func deleteFoodIfInCart(_ food: Food){
         // if user has added food in the cart previously, delete from cart
-        requestUserCartInfo(for: currentUser) { foods in
+        requestUserCartInfo{ foods in
             
             guard let foods = foods else{ return }
             for foodInDatabase in foods{
                 if foodInDatabase.foodName == food.foodName{
-                    self.deleteItem(for: currentUser, id: Int(foodInDatabase.foodIDInCart)!)
+                    self.deleteItem(id: Int(foodInDatabase.foodIDInCart)!)
                 }
             }
         }
     }
     
-    static func deleteItem(for currentUser: String,id: Int){
-        // delete food from cart
-        let deleteFoodBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
-        
-        let params: [String:Any] = ["kullanici_adi": currentUser, "sepet_yemek_id": id]
-        AF.request(URL(string: deleteFoodBaseURL)!,method: .post, parameters: params).response(){ response in
-            if let data = response.data{
-                do{
-                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
-                    print("Deleting CartID: \(id)...")
-                    print("Deleting: \(response.success == 1 ? "Success": "Failed")")
-                }catch{
-                    print(error)
+    static func deleteItem(id: Int){
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                // delete food from cart
+                let deleteFoodBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
+                
+                let params: [String:Any] = ["kullanici_adi": currentUser, "sepet_yemek_id": id]
+                AF.request(URL(string: deleteFoodBaseURL)!,method: .post, parameters: params).response(){ response in
+                    if let data = response.data{
+                        do{
+                            let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                            print("Deleting CartID: \(id)...")
+                            print("Deleting: \(response.success == 1 ? "Success": "Failed")")
+                        }catch{
+                            print(error)
+                        }
+                    }
                 }
             }
         }
@@ -178,12 +202,16 @@ struct APIService{
         }
     }
     
-    static func deleteAllCart(for currentUser: String, completion: @escaping((Error?) -> ())){
-        requestUserCartInfo(for: currentUser) { cart in
-            if let cart = cart{
-                for food in cart{
-                    deleteItem(for: currentUser, id: Int(food.foodIDInCart)!){ error in
-                        completion(error)
+    static func deleteAllCart(completion: @escaping((Error?) -> ())){
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                requestUserCartInfo{ cart in
+                    if let cart = cart{
+                        for food in cart{
+                            deleteItem(for: currentUser, id: Int(food.foodIDInCart)!){ error in
+                                completion(error)
+                            }
+                        }
                     }
                 }
             }
