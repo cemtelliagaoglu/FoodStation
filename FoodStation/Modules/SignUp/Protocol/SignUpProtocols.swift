@@ -5,8 +5,6 @@
 //  Created by admin on 9.02.2023.
 //
 
-import Foundation
-
 protocol SignUpViewToPresenter{
     var interactor: SignUpPresenterToInteractor? { get set }
     var router: SignUpPresenterToRouter?{ get set }

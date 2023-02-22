@@ -5,8 +5,6 @@
 //  Created by admin on 7.02.2023.
 //
 
-import UIKit
-
 class LoginPresenter: LoginViewToPresenter{
     
     var interactor: LoginPresenterToInteractor?

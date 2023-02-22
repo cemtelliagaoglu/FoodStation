@@ -5,8 +5,6 @@
 //  Created by admin on 9.02.2023.
 //
 
-import UIKit
-
 class SignUpPresenter: SignUpViewToPresenter{
     
     var interactor: SignUpPresenterToInteractor?
