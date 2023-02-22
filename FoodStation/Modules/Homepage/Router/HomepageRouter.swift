@@ -38,23 +38,16 @@ class HomepageRouter: HomepagePresenterToRouter{
         
         return navController
     }
-    
-    func pushToLoginVC() {
-        let navigationController = LoginRouter.createModule()
-        navigationController.modalPresentationStyle = .fullScreen
-        
-        navController?.present(navigationController, animated: true)
-    }
+ 
     func pushToDetailsVC(for food: Food) {
         let detailsVC = DetailsRouter.createModule()
         detailsVC.food = food
         navController?.pushViewController(detailsVC, animated: true)
     }
     
-    func goToDetailsVC(from navController: UINavigationController, food: Food?) {
-        let detailsVC = DetailsVC()
-        detailsVC.food = food
-        navController.pushViewController(detailsVC, animated: true)
-        navController.modalPresentationStyle = .fullScreen
+    func pushToProfileVC() {
+        let profileVC = ProfileRouter.createModule()
+        navController?.pushViewController(profileVC, animated: true)
+        navController?.modalPresentationStyle = .fullScreen
     }
 }

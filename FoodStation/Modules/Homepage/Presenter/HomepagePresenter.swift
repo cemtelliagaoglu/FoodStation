@@ -17,6 +17,9 @@ class HomepagePresenter: HomepageViewToPresenter{
         view?.configUI()
         interactor?.requestLoadFoodList()
     }
+    func notifyViewWillAppear() {
+        view?.reloadData()
+    }
     func numberOfItems() -> Int? {
         return interactor?.numberOfFoods()
     }
@@ -28,36 +31,33 @@ class HomepagePresenter: HomepageViewToPresenter{
         router?.pushToDetailsVC(for: food)
     }
     func updateFoodInCart(at indexPath: IndexPath, amount: Int) {
-        interactor?.requestUpdateCartForFood(at: indexPath.row, amount: amount)
+        interactor?.requestUpdateCartForFood(at: indexPath, amount: amount)
         view?.startLoadingAnimation(at: indexPath)
     }
-    func logOutTapped() {
-        interactor?.requestSignOut()
+    func didLikeFood(at indexPath: IndexPath, didLike: Bool) {
+        interactor?.updateFoodLike(at: indexPath, didLike: didLike)
     }
-    func didLikeFood(at index: Int, didLike: Bool) {
-        interactor?.updateFoodLike(at: index, didLike: didLike)
+    func foodAmountForCell(at indexPath: IndexPath) {
+        interactor?.requestFoodAmount(at: indexPath)
     }
-    func foodAmountForCell(at index: Int) -> Int {
-        return 1
+    func profileButtonTapped() {
+        router?.pushToProfileVC()
     }
 }
 //MARK: - InteractorToPresenter Methods
 extension HomepagePresenter: HomepageInteractorToPresenter{
     
-    func loadDataSucceed() {
+    func loadedFoodListSuccessfully() {
         view?.reloadData()
     }
-    func updatedSuccessfully() {
-        view?.reloadData()
+    func checkedCartSuccessfully(at indexPath: IndexPath, amountInCart: Int) {
+        view?.updateFoodAmountForCell(at: indexPath, amount: amountInCart)
     }
     func updatedSuccessfully(at indexPath: IndexPath) {
         view?.stopLoadingAnimation(at: indexPath)
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)
-    }
-    func requestSignOutSucceed() {
-        router?.pushToLoginVC()
     }
     
 }

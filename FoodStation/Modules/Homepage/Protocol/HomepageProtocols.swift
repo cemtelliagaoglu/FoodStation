@@ -13,41 +13,41 @@ protocol HomepageViewToPresenter{
     var router: HomepagePresenterToRouter? { get set }
     
     func notifyViewDidLoad()
+    func notifyViewWillAppear()
     func updateFoodInCart(at indexPath: IndexPath, amount: Int)
     func numberOfItems() -> Int?
     func foodForCell(at index: Int) -> Food?
-    func logOutTapped()
+    func profileButtonTapped()
     func didSelectFood(at index: Int)
-    func didLikeFood(at index: Int, didLike: Bool)
-    func foodAmountForCell(at index: Int) -> Int
+    func didLikeFood(at indexPath: IndexPath, didLike: Bool)
+    func foodAmountForCell(at indexPath: IndexPath)
 }
 
 protocol HomepagePresenterToInteractor{
     var presenter: HomepageInteractorToPresenter? { get set }
     
     func requestLoadFoodList()
-    func requestUpdateCartForFood(at index: Int, amount: Int)
+    func requestUpdateCartForFood(at indexPath: IndexPath, amount: Int)
     func numberOfFoods() -> Int?
     func foodForCell(at index: Int) -> Food?
-    func requestSignOut()
     func foodInfo(at index: Int) -> Food?
-    func updateFoodLike(at index: Int, didLike: Bool)
-    func requestFoodAmount(at index: Int)
+    func updateFoodLike(at indexPath: IndexPath, didLike: Bool)
+    func requestFoodAmount(at indexPath: IndexPath)
 }
 
 protocol HomepageInteractorToPresenter{
     
-    func loadDataSucceed()
+    func loadedFoodListSuccessfully()
+    func checkedCartSuccessfully(at indexPath: IndexPath, amountInCart: Int)
     func requestFailed(with errorMessage: String)
-    func updatedSuccessfully()
     func updatedSuccessfully(at indexPath: IndexPath)
-    func requestSignOutSucceed()
 }
 
 protocol HomepagePresenterToView{
     
     func configUI()
     func showErrorMessage(_ errorMessage: String)
+    func updateFoodAmountForCell(at indexPath:IndexPath, amount: Int)
     func reloadData()
     func startLoadingAnimation(at indexPath: IndexPath)
     func stopLoadingAnimation(at indexPath: IndexPath)
@@ -56,7 +56,6 @@ protocol HomepagePresenterToView{
 
 protocol HomepagePresenterToRouter{
     static func createModule() -> UINavigationController
-    
-    func pushToLoginVC()
     func pushToDetailsVC(for food: Food)
+    func pushToProfileVC()
 }
