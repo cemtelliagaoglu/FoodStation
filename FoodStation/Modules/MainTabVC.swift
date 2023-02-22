@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 class MainTabVC: UITabBarController{
     //MARK: - Properties
@@ -50,8 +49,8 @@ class MainTabVC: UITabBarController{
     }
     
     func checkIfUserIsLoggedIn(){
-        if Auth.auth().currentUser == nil{
-            DispatchQueue.main.async {
+        FirebaseService.checkLoginStatus { isLoggedIn in
+            if isLoggedIn{
                 // present login controller
                 let navController = LoginRouter.createModule()
                 navController.modalPresentationStyle = .fullScreen
