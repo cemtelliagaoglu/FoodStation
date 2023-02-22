@@ -5,8 +5,6 @@
 //  Created by admin on 21.02.2023.
 //
 
-import Foundation
-
 class LikePresenter: LikeViewToPresenter{
     var interactor: LikePresenterToInteractor?
     
@@ -18,15 +16,21 @@ class LikePresenter: LikeViewToPresenter{
         view?.configUI()
         interactor?.requestLoadingLikedFoods()
     }
+    func foodForCell(at index: Int) -> Food? {
+        return interactor?.foodInfo(at: index)
+    }
     
     func numberOfItems() -> Int? {
         return interactor?.numberOfFoods()
     }
     
     func didSelectFood(at index: Int) {
-        
+        guard let food = interactor?.foodInfo(at: index) else{ return }
+        router?.pushToDetails(for: food)
     }
-    
+    func likeButtonTapped(at index: Int) {
+        interactor?.removeLikedFood(at: index)
+    }
 }
 //MARK: - InteractorToPresenter
 extension LikePresenter: LikeInteractorToPresenter{
@@ -36,5 +40,8 @@ extension LikePresenter: LikeInteractorToPresenter{
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)
+    }
+    func removedLikeSuccessfully() {
+        view?.reloadData()
     }
 }

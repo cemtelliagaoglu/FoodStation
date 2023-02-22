@@ -16,6 +16,12 @@ class LikeRouter: LikePresenterToRouter{
         let presenter = LikePresenter()
         let router = LikeRouter()
         
+        view.presenter = presenter
+        presenter.view = view
+        presenter.interactor = LikeInteractor()
+        presenter.router = router
+        presenter.interactor?.presenter = presenter
+        
         // navController configurations
         let navController = UINavigationController(rootViewController: view)
         let appearance = UINavigationBarAppearance()
@@ -29,5 +35,9 @@ class LikeRouter: LikePresenterToRouter{
         router.navigationController = navController
         return navController
     }
-    
+    func pushToDetails(for food: Food) {
+        let detailsVC = DetailsRouter.createModule()
+        detailsVC.food = food
+        navigationController?.pushViewController(detailsVC, animated: true)
+    }
 }
