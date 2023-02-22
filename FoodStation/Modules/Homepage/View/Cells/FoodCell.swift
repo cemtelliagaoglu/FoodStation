@@ -38,6 +38,16 @@ class FoodCell: UICollectionViewCell{
     
     var indexPath: IndexPath?
     
+    var viewingMode: ViewingMode?{
+        didSet{
+            configUI()
+        }
+    }
+    
+    enum ViewingMode{
+        case like, homepage
+    }
+    
     lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -83,10 +93,9 @@ class FoodCell: UICollectionViewCell{
         stackView.axis = .vertical
         stackView.layer.cornerRadius = 10
         stackView.backgroundColor = .white
+        stackView.alignment = .center
         stackView.contentMode = .scaleToFill
         stackView.distribution = .fill
-        bottomStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor,constant: 8).isActive = true
-        bottomStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -8).isActive = true
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -116,8 +125,6 @@ class FoodCell: UICollectionViewCell{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configUI()
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -132,29 +139,62 @@ class FoodCell: UICollectionViewCell{
     }
     
     func configUI(){
+
+        if viewingMode == .like{
+            addSubview(mainStackView)
+            addSubview(likeButton)
+            
+            mainStackView.axis = .horizontal
+            mainStackView.spacing = 16
+            bottomStackView.spacing = 8
+            
+            NSLayoutConstraint.activate([
+                // mainStackView
+                mainStackView.topAnchor.constraint(equalTo: topAnchor),
+                mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                mainStackView.trailingAnchor.constraint(equalTo: likeButton.leadingAnchor, constant: -16),
+                // likeButton
+                likeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+                likeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+                likeButton.heightAnchor.constraint(equalToConstant: 30),
+                likeButton.widthAnchor.constraint(equalToConstant: 35),
+                // imageView
+                imageView.heightAnchor.constraint(equalToConstant: 100),
+                imageView.widthAnchor.constraint(equalToConstant: 100)
+            ])
+            
+        }else{
+            addSubview(mainStackView)
+            addSubview(customStepper)
+            addSubview(likeButton)
+            
+            mainStackView.axis = .vertical
+            
+            NSLayoutConstraint.activate([
+                // mainStackView
+                mainStackView.topAnchor.constraint(equalTo: topAnchor),
+                mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                // bottomStackView
+                bottomStackView.leadingAnchor.constraint(equalTo: mainStackView.leadingAnchor,constant: 8),
+                bottomStackView.trailingAnchor.constraint(equalTo: mainStackView.trailingAnchor, constant: -8),
+                // customStepper
+                customStepper.topAnchor.constraint(equalTo: topAnchor),
+                customStepper.trailingAnchor.constraint(equalTo: trailingAnchor),
+                
+                // likeButton
+                likeButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+                likeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+                likeButton.heightAnchor.constraint(equalToConstant: 30),
+                likeButton.widthAnchor.constraint(equalToConstant: 35)
+            ])
+            layer.borderWidth = 0.5
+            layer.cornerRadius = 10
+            layer.borderColor = UIColor(named: "bgColor1")!.cgColor
+        }
         
-        addSubview(mainStackView)
-        addSubview(customStepper)
-        addSubview(likeButton)
-        
-        NSLayoutConstraint.activate([
-            // mainStackView
-            mainStackView.topAnchor.constraint(equalTo: topAnchor),
-            mainStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            mainStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            // customStepper
-            customStepper.topAnchor.constraint(equalTo: topAnchor),
-            customStepper.trailingAnchor.constraint(equalTo: trailingAnchor),
-            // likeButton
-            likeButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            likeButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            likeButton.heightAnchor.constraint(equalToConstant: 30),
-            likeButton.widthAnchor.constraint(equalToConstant: 35)
-        ])
-        layer.borderWidth = 0.5
-        layer.cornerRadius = 10
-        layer.borderColor = UIColor(named: "bgColor1")!.cgColor
     }
     
     func updateUI(){
