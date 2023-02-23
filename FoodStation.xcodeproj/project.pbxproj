@@ -41,6 +41,7 @@
 		843168292992A17D00908312 /* LoginInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843168282992A17D00908312 /* LoginInteractor.swift */; };
 		8431682B2992A18200908312 /* LoginRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8431682A2992A18200908312 /* LoginRouter.swift */; };
 		8431682D2992A18800908312 /* LoginProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8431682C2992A18800908312 /* LoginProtocols.swift */; };
+		8478383829A6519000DCE6B7 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8478383729A6519000DCE6B7 /* SearchCell.swift */; };
 		8481D3E42995137A0065D7CB /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481D3E32995137A0065D7CB /* ProfileVC.swift */; };
 		8481D3E6299513800065D7CB /* ProfilePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481D3E5299513800065D7CB /* ProfilePresenter.swift */; };
 		8481D3E8299513880065D7CB /* ProfileInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8481D3E7299513880065D7CB /* ProfileInteractor.swift */; };
@@ -98,6 +99,7 @@
 		843168282992A17D00908312 /* LoginInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginInteractor.swift; sourceTree = "<group>"; };
 		8431682A2992A18200908312 /* LoginRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRouter.swift; sourceTree = "<group>"; };
 		8431682C2992A18800908312 /* LoginProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProtocols.swift; sourceTree = "<group>"; };
+		8478383729A6519000DCE6B7 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		8481D3E32995137A0065D7CB /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		8481D3E5299513800065D7CB /* ProfilePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenter.swift; sourceTree = "<group>"; };
 		8481D3E7299513880065D7CB /* ProfileInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInteractor.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 			isa = PBXGroup;
 			children = (
 				841910F7299186A50005F6D5 /* FoodCell.swift */,
+				8478383729A6519000DCE6B7 /* SearchCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -768,6 +771,7 @@
 				8481D3E8299513880065D7CB /* ProfileInteractor.swift in Sources */,
 				8481D3FB2995265D0065D7CB /* SignUpProtocols.swift in Sources */,
 				84AAE9FB2993ADD200B6A712 /* CustomStepper.swift in Sources */,
+				8478383829A6519000DCE6B7 /* SearchCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
