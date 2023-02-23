@@ -217,22 +217,28 @@ struct APIService{
             }
         }
     }
-
-//    func queryFoodID(foodName: String ) -> Int{
-//        // get food data
-//        let allFoodsURLString = "http://kasimadalan.pe.hu/yemekler/tumYemekleriGetir.php"
-//        var foodId = 0
-//        AF.request(allFoodsURLString,method: .get).response{ response in
-//            if let data = response.data{
-//                do{
-//                    let decodedData = try JSONDecoder().decode(FoodResponse.self, from: data)
-//                    let food = decodedData.foods.filter({$0.foodName == foodName}).first!
-//                    foodId = Int(food.foodId)!
-//                }catch{
-//                    print(error)
-//                }
-//            }
-//        }
-//        return foodId
-//    }
+    
+    static func requestFoodsContaining(_ text: String, completion: @escaping(([Food]?, String?) -> ())) {
+        let imagesBaseURLString = "http://kasimadalan.pe.hu/yemekler/resimler/"
+        let allFoodsURLString = "http://kasimadalan.pe.hu/yemekler/tumYemekleriGetir.php"
+        // get food data
+        AF.request(allFoodsURLString,method: .get).response{ response in
+            if let data = response.data{
+                do{
+                    let decodedData = try JSONDecoder().decode(FoodResponse.self, from: data)
+                    let filteredList = decodedData.foods.filter({ $0.foodName.contains(text)})
+                    var foods = [Food]()
+                    // download food images
+                    for var food in filteredList{
+                        food.foodImageURL = imagesBaseURLString + food.foodImageName
+                        foods.append(food)
+                    }
+                    completion(foods, nil)
+                }catch{
+                    completion(nil,error.localizedDescription)
+                    print(error)
+                }
+            }
+        }
+    }
 }

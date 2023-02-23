@@ -78,7 +78,26 @@ class HomepageInteractor: HomepagePresenterToInteractor{
             if error != nil{
                 self.presenter?.requestFailed(with: error!.localizedDescription)
             }else{
-                self.presenter?.updatedSuccessfully(at: indexPath)
+                self.presenter?.updatedLikeSuccessfully(at: indexPath, didLike: didLike)
+            }
+        }
+    }
+    func filterFoodsContainingText(text: String) {
+        if text.isEmpty{
+            requestLoadFoodList()
+        }else{
+            APIService.requestFoodsContaining(text) { filteredList, error in
+                if error != nil{
+                    self.presenter?.requestFailed(with: error!)
+                }else{
+                    if filteredList != nil{
+                        // check likes for filteredList
+                        FirebaseService.addLikesToFoodList(for: filteredList!) { updatedList in
+                            self.foodList = updatedList
+                            self.presenter?.loadedFoodListSuccessfully()
+                        }
+                    }
+                }
             }
         }
     }

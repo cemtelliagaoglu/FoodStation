@@ -58,7 +58,7 @@ struct FirebaseService{
     
     static func addLikesToFoodList(for foodList: [Food], completion: @escaping(([Food]) -> ())){
         if let currentUID = Auth.auth().currentUser?.uid{
-            Database.database().reference().child("user-like").child(currentUID).observe(.value) { snapshot in
+            Database.database().reference().child("user-like").child(currentUID).observeSingleEvent(of: .value) { snapshot in
                 var tempList = [Food]()
                 for var food in foodList{
                     if snapshot.hasChild(food.foodId){

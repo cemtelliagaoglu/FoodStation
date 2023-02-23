@@ -15,9 +15,9 @@ class HomepagePresenter: HomepageViewToPresenter{
     
     func notifyViewDidLoad() {
         view?.configUI()
-        interactor?.requestLoadFoodList()
     }
     func notifyViewWillAppear() {
+        interactor?.requestLoadFoodList()
         view?.reloadData()
     }
     func numberOfItems() -> Int? {
@@ -43,12 +43,16 @@ class HomepagePresenter: HomepageViewToPresenter{
     func profileButtonTapped() {
         router?.pushToProfileVC()
     }
+    func searchTextDidChange(searchText: String) {
+        interactor?.filterFoodsContainingText(text: searchText)
+    }
 }
 //MARK: - InteractorToPresenter Methods
 extension HomepagePresenter: HomepageInteractorToPresenter{
     
     func loadedFoodListSuccessfully() {
         view?.reloadData()
+        view?.enableSearchBar(true)
     }
     func checkedCartSuccessfully(at indexPath: IndexPath, amountInCart: Int) {
         view?.updateFoodAmountForCell(at: indexPath, amount: amountInCart)
@@ -58,6 +62,9 @@ extension HomepagePresenter: HomepageInteractorToPresenter{
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)
+    }
+    func updatedLikeSuccessfully(at indexPath: IndexPath, didLike: Bool) {
+        view?.updateLikeButtonForCell(at: indexPath, didLike: didLike)
     }
     
 }

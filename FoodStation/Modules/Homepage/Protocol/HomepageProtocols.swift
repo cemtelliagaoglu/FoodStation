@@ -21,6 +21,7 @@ protocol HomepageViewToPresenter{
     func didSelectFood(at index: Int)
     func didLikeFood(at indexPath: IndexPath, didLike: Bool)
     func foodAmountForCell(at indexPath: IndexPath)
+    func searchTextDidChange(searchText: String)
 }
 
 protocol HomepagePresenterToInteractor{
@@ -33,6 +34,7 @@ protocol HomepagePresenterToInteractor{
     func foodInfo(at index: Int) -> Food?
     func updateFoodLike(at indexPath: IndexPath, didLike: Bool)
     func requestFoodAmount(at indexPath: IndexPath)
+    func filterFoodsContainingText(text: String)
 }
 
 protocol HomepageInteractorToPresenter{
@@ -41,6 +43,7 @@ protocol HomepageInteractorToPresenter{
     func checkedCartSuccessfully(at indexPath: IndexPath, amountInCart: Int)
     func requestFailed(with errorMessage: String)
     func updatedSuccessfully(at indexPath: IndexPath)
+    func updatedLikeSuccessfully(at indexPath: IndexPath, didLike: Bool)
 }
 
 protocol HomepagePresenterToView{
@@ -51,6 +54,8 @@ protocol HomepagePresenterToView{
     func reloadData()
     func startLoadingAnimation(at indexPath: IndexPath)
     func stopLoadingAnimation(at indexPath: IndexPath)
+    func enableSearchBar(_ isEnable: Bool)
+    func updateLikeButtonForCell(at indexPath: IndexPath, didLike: Bool)
 }
 
 
