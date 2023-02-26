@@ -25,6 +25,7 @@ protocol CartPresenterToInteractor{
     func requestLoadCart()
     func calculatePriceInCart()
     func requestUpdateCart(at indexPath: IndexPath, newAmount: Int)
+    func deleteItem(at indexPath: IndexPath)
     func foodInCart(at index: Int) -> FoodInCart?
     func numberOfFoodsInCart() -> Int?
     func requestDeleteAllCart()

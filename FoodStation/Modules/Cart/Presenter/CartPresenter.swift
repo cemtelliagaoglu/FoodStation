@@ -28,8 +28,12 @@ class CartPresenter: CartViewToPresenter{
     }
     
     func amountDidChange(at indexPath: IndexPath, newAmount: Int) {
-        interactor?.requestUpdateCart(at: indexPath, newAmount: newAmount)
-        view?.startLoadingAnimation(at: indexPath)
+        if newAmount == 0{
+            interactor?.deleteItem(at: indexPath)
+        }else{
+            interactor?.requestUpdateCart(at: indexPath, newAmount: newAmount)
+            view?.startLoadingAnimation(at: indexPath)
+        }
     }
     func deleteAllCartTapped() {
         interactor?.requestDeleteAllCart()

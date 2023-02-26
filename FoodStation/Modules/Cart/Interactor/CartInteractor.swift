@@ -29,21 +29,26 @@ class CartInteractor: CartPresenterToInteractor{
     }
     
     func requestUpdateCart(at indexPath: IndexPath, newAmount: Int) {
-        guard let food = cart?[indexPath.row] else{ return }
-        if newAmount == 0{
-            APIService.deleteItem(foodIDInCart: Int(food.foodIDInCart)!)
-            self.cart?.remove(at: indexPath.row)
-            self.presenter?.updatedCart(at: indexPath)
-        }else{
-            APIService.requestAddToCart(foodInCart: food, amount: newAmount) { result in
-                if result == "success"{
-                    self.requestLoadCart()
-                    self.presenter?.updatedCart(at: indexPath)
-                }else{
-                    self.presenter?.requestFailed(with: result)
-                }
+        guard let food = cart?[indexPath.row] else{
+            print("food not found at cart")
+            return }
+    
+        APIService.requestAddToCart(foodInCart: food, amount: newAmount) { result in
+            if result == "success"{
+                self.requestLoadCart()
+                self.presenter?.updatedCart(at: indexPath)
+            }else{
+                self.presenter?.requestFailed(with: result)
             }
         }
+    }
+    func deleteItem(at indexPath: IndexPath) {
+        guard let food = cart?[indexPath.row] else{
+            print("food not found at cart")
+            return }
+        APIService.deleteItem(foodIDInCart: Int(food.foodIDInCart)!)
+        self.cart?.remove(at: indexPath.row)
+        self.presenter?.updatedCart()
     }
     
     func calculatePriceInCart(){
