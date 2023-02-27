@@ -46,7 +46,6 @@ class HomepageVC: UIViewController {
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.font = UIFont(name: "OpenSans-Regular", size: 18)
         searchBar.searchTextField.textColor = .black
-        searchBar.isUserInteractionEnabled = false
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         return searchBar
@@ -65,9 +64,6 @@ class HomepageVC: UIViewController {
     //MARK: - Handlers
     @objc func handleProfileButtonTapped(){
         self.presenter?.profileButtonTapped()
-    }
-    @objc func handleViewTapped(){
-        searchBar.endEditing(true)
     }
 }
 //MARK: - UICollectionView
@@ -224,11 +220,6 @@ extension HomepageVC: HomepagePresenterToView{
     func updateLikeButtonForCell(at indexPath: IndexPath, didLike: Bool) {
         let cell = collectionView.cellForItem(at: indexPath) as? FoodCell
         cell?.didLike = didLike
-    }
-    func enableSearchBar(_ isEnable: Bool) {
-        let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? SearchCell
-        cell?.searchBar.isUserInteractionEnabled = isEnable
-        searchBar.isUserInteractionEnabled = isEnable
     }
 }
 //MARK: - FoodCellDelegate

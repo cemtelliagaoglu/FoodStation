@@ -27,7 +27,6 @@ class SearchCell: UICollectionViewCell{
         searchBar.searchTextField.backgroundColor = .white
         searchBar.searchTextField.font = UIFont(name: "OpenSans-Regular", size: 18)
         searchBar.searchTextField.textColor = .black
-        searchBar.isUserInteractionEnabled = false
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         return searchBar
@@ -63,11 +62,7 @@ extension SearchCell: UISearchBarDelegate{
             delegate?.textDidChange(text: searchText)
         }
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        
-    }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
     }
-    
 }

@@ -54,7 +54,6 @@ protocol HomepagePresenterToView{
     func reloadData()
     func startLoadingAnimation(at indexPath: IndexPath)
     func stopLoadingAnimation(at indexPath: IndexPath)
-    func enableSearchBar(_ isEnable: Bool)
     func updateLikeButtonForCell(at indexPath: IndexPath, didLike: Bool)
 }
 

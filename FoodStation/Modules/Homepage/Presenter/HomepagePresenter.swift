@@ -52,7 +52,6 @@ extension HomepagePresenter: HomepageInteractorToPresenter{
     
     func loadedFoodListSuccessfully() {
         view?.reloadData()
-        view?.enableSearchBar(true)
     }
     func checkedCartSuccessfully(at indexPath: IndexPath, amountInCart: Int) {
         view?.updateFoodAmountForCell(at: indexPath, amount: amountInCart)

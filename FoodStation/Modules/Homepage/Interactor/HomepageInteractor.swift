@@ -34,7 +34,7 @@ class HomepageInteractor: HomepagePresenterToInteractor{
 
         APIService.requestUserCartInfo{ foods in
             if let cart = foods{
-                guard let foodAtIndex = self.foodList?[indexPath.row] else{
+                guard let foodAtIndex = self.foodList?[safe: indexPath.row] else{
                     print("FoodList at \(indexPath.row), is empty")
                     return
                 }
