@@ -68,6 +68,33 @@ class SignUpVC: UIViewController{
         return textField
     }()
     
+    lazy var addressTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont(name: "OpenSans-Medium", size: 18)
+        textView.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textView.text = "Address"
+        textView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        textView.layer.cornerRadius = 5
+        textView.layer.borderWidth = 2
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
+    lazy var cardNumberTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Card Number"
+        textField.keyboardType = .numberPad
+        textField.textColor = UIColor(named: "bgColor1")
+        textField.font = UIFont(name: "OpenSans-Medium", size: 20)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
+        textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+        return textField
+    }()
+    
     lazy var signUpButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .systemGray
@@ -107,6 +134,15 @@ class SignUpVC: UIViewController{
         return label
     }()
     
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel,nameTextField, emailTextField,passwordTextField, addressTextView, cardNumberTextField])
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 16
+        stackView.backgroundColor = .clear
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,8 +154,10 @@ class SignUpVC: UIViewController{
     @objc func handleSignUpTapped(){
         if let email = emailTextField.text,
            let password = passwordTextField.text,
-           let name = nameTextField.text{
-            presenter?.signUpTapped(with: email, password, name)
+           let name = nameTextField.text,
+           let address = addressTextView.text,
+           let cardNumber = cardNumberTextField.text{
+            presenter?.signUpTapped(with: email, password, name, address: address, cardNumber: cardNumber)
         }
         
     }
@@ -130,6 +168,8 @@ class SignUpVC: UIViewController{
     @objc func formValidation(){
         guard emailTextField.hasText,
               passwordTextField.hasText,
+              addressTextView.hasText && addressTextView.text != "Address",
+              cardNumberTextField.hasText,
               passwordTextField.text!.count >= 6 else{
             signUpButton.isEnabled = false
             signUpButton.backgroundColor = .systemGray
@@ -151,38 +191,24 @@ extension SignUpVC: SignUpPresenterToView{
     func configUI() {
         view.backgroundColor = UIColor(named: "bgColor2")
         
+        view.addSubview(stackView)
+        
         view.addSubview(signUpButton)
-        view.addSubview(passwordTextField)
-        view.addSubview(emailTextField)
         view.addSubview(loginLabel)
-        view.addSubview(nameTextField)
-        view.addSubview(titleLabel)
         
         NSLayoutConstraint.activate([
-            // loginButton
+            // stackView
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            // signUpButton
+            signUpButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 32),
             signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            signUpButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signUpButton.widthAnchor.constraint(equalToConstant: 100),
-            // passwordTextField
-            passwordTextField.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: -50),
-            passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
-            // emailTextField
-            emailTextField.bottomAnchor.constraint(equalTo: passwordTextField.topAnchor, constant: -16),
-            emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             // loginLabel
             loginLabel.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 32),
             loginLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             loginLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
-            // nameTextField
-            nameTextField.bottomAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -16),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            // titleLabel
-            titleLabel.bottomAnchor.constraint(equalTo: nameTextField.topAnchor, constant: -50),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
         
     }

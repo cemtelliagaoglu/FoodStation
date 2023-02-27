@@ -9,11 +9,12 @@ class SignUpInteractor: SignUpPresenterToInteractor{
     
     var presenter: SignUpInteractorToPresenter?
     
-    func requestSignUp(with email: String, _ password: String, _ name: String) {
-        FirebaseService.requestSignUp(email: email, password: password) { error in
+    func requestSignUp(with email: String, _ password: String, _ name: String, address: String, cardNumber: String) {
+        FirebaseService.requestSignUp(email: email, password: password) { uid, error in
             if error != nil{
                 self.presenter?.requestSignUpFailed(with: error!)
-            }else{
+            }else if uid != nil{
+                FirebaseService.createNewUserInfo(uid: uid!, name: name, address: address, card_number: cardNumber)
                 self.presenter?.requestSignUpSucceed()
             }
         }

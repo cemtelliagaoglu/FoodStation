@@ -11,8 +11,8 @@ class SignUpPresenter: SignUpViewToPresenter{
     var router: SignUpPresenterToRouter?
     var view: SignUpPresenterToView?
     
-    func signUpTapped(with email: String, _ password: String, _ name: String) {
-        interactor?.requestSignUp(with: email, password, name)
+    func signUpTapped(with email: String, _ password: String, _ name: String, address: String, cardNumber: String) {
+        interactor?.requestSignUp(with: email, password, name, address: address, cardNumber: cardNumber)
     }
     func loginTapped() {
         router?.popVC()
