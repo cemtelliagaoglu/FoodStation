@@ -68,7 +68,7 @@ class CheckoutVC: UIViewController {
         label.font = UIFont(name: "OpenSans-Medium", size: 16)
         label.textColor = .black
         label.text = ""
-        label.numberOfLines = 0
+        label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

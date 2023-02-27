@@ -123,7 +123,7 @@ extension CartVC: CartPresenterToView{
     }
     func setPriceLabel(with price: String) {
         totalPriceLabel.text = price
-        totalPriceLabel.isHidden = price == "0 TL"
+        totalPriceLabel.isHidden = price == "Total: 0 TL"
     }
     func reloadData() {
         tableView.reloadData()
