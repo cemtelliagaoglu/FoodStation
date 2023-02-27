@@ -1,0 +1,147 @@
+//
+//  EditProfileVC.swift
+//  FoodStation
+//
+//  Created by admin on 27.02.2023.
+//
+
+import UIKit
+
+class EditProfileVC: UIViewController{
+    //MARK: - Properties
+    private let cellIdentifier = "cellIdentifier"
+    
+    var presenter: EditProfileViewToPresenter?
+    
+    lazy var nameTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Your Name"
+        textField.keyboardType = .emailAddress
+        textField.font = UIFont(name: "OpenSans-Medium", size: 20)
+        textField.textColor = UIColor(named: "textColor")
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
+        textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
+    }()
+    
+    lazy var addressTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont(name: "OpenSans-Medium", size: 18)
+        textView.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        textView.layer.cornerRadius = 5
+        textView.layer.borderWidth = 2
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
+    }()
+    
+    lazy var cardNumberTextField: UITextField = {
+        let textField = UITextField()
+        textField.placeholder = "Card Number"
+        textField.keyboardType = .numberPad
+        textField.textColor = UIColor(named: "bgColor1")
+        textField.font = UIFont(name: "OpenSans-Medium", size: 20)
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
+        textField.borderStyle = .roundedRect
+        textField.layer.cornerRadius = 5
+        textField.layer.borderWidth = 2
+        textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+        return textField
+    }()
+    
+    lazy var stackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [nameTextField, addressTextView, cardNumberTextField])
+        stackView.axis = .vertical
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 16
+        stackView.backgroundColor = .clear
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+    
+    lazy var saveButton: UIButton = {
+        let button = UIButton(type: .custom)
+        let attributedTitle = NSAttributedString(string: "Save Changes",
+                                                 attributes: [
+                                                    .font: UIFont(name: "OpenSans-Medium", size: 20)!,
+                                                    .foregroundColor: UIColor.white
+                                                 ])
+        button.setAttributedTitle(attributedTitle, for: .normal)
+        button.layer.cornerRadius = 10
+        button.layer.borderColor = UIColor.white.cgColor
+        button.isEnabled = false
+        button.backgroundColor = .systemGray
+        button.layer.borderWidth = 2
+        button.addTarget(self, action: #selector(handleSaveButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    //MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        presenter?.notifyViewDidLoad()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.notifyViewWillAppear()
+    }
+    //MARK: - Handlers
+    @objc func formValidation(){
+        guard addressTextView.hasText,
+              nameTextField.hasText,
+              cardNumberTextField.hasText else{
+            saveButton.isEnabled = false
+            saveButton.backgroundColor = .systemGray
+            return
+        }
+        saveButton.isEnabled = true
+        saveButton.backgroundColor = UIColor(named: "bgColor1")
+    }
+    @objc func handleSaveButtonTapped(){
+        guard let name = nameTextField.text,
+              let address = addressTextView.text,
+              let cardNumber = cardNumberTextField.text else{ return }
+        presenter?.saveChangesTapped(name: name, address: address, cardNumber: cardNumber)
+    }
+
+}
+//MARK: - PresenterToView Methods
+extension EditProfileVC: EditProfilePresenterToView{
+    
+    func configUI() {
+        view.backgroundColor = UIColor(named: "bgColor2")
+        navigationItem.title = "Edit Profile"
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        view.addSubview(stackView)
+        view.addSubview(saveButton)
+        
+        NSLayoutConstraint.activate([
+            // stackView
+            stackView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 32),
+            stackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 32),
+            stackView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -32),
+            // saveButton
+            saveButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 50),
+            saveButton.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
+            saveButton.widthAnchor.constraint(equalToConstant: 200)
+        ])
+    }
+    func setUserInfo(name: String, address: String, cardNumber: String) {
+        nameTextField.text = name
+        addressTextView.text = address
+        cardNumberTextField.text = cardNumber
+    }
+    func showErrorMessage(_ errorMessage: String) {
+        let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Close", style: .cancel))
+        navigationController?.present(alert, animated: true)
+    }
+}
