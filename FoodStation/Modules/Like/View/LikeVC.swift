@@ -16,7 +16,7 @@ class LikeVC: UIViewController{
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 46, right: 16)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = UIColor(named: "bgColor2")
@@ -52,7 +52,9 @@ extension LikeVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         let width = UIScreen.main.bounds.width - 32
         return CGSize(width: width, height: 150)
     }
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter?.didSelectFood(at: indexPath.row)
+    }
 }
 //MARK: - PresenterToView Methods
 extension LikeVC: LikePresenterToView{
