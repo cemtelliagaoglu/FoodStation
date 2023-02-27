@@ -131,6 +131,16 @@ struct FirebaseService{
             Database.database().reference().child("user-info").child(currentUID).updateChildValues(["card_number": newCardNumber])
         }
     }
+    static func requestUpdateUserInfo(name: String, address: String, cardNumber: String, completion: @escaping((Error?) -> ())){
+        
+        if let currentUID = Auth.auth().currentUser?.uid{
+            
+            let dictionary = ["name": name, "address": address,"card_number": cardNumber]
+            Database.database().reference().child("user-info").child(currentUID).updateChildValues(dictionary) { error, ref in
+                completion(error)
+            }
+        }
+    }
     static func requestSaveOrder(cart: [FoodInCart], price: Int, address: String, cardNumber: String,date: String, completion: @escaping((Error?) -> ()) ){
         // order-history -> uid -> order-id -> address: "" , details: [FoodName,FoodAmount, FoodPrice, FoodImageURL],
         if let currentUID = Auth.auth().currentUser?.uid{
@@ -153,9 +163,25 @@ struct FirebaseService{
             }
         }
     }
-    static func requestOrderHistory(){
+    static func requestOrderHistory(completion: @escaping(([Order]) -> ())){
         if let currentUID = Auth.auth().currentUser?.uid{
-            
+            var tempList: [Order] = []
+            Database.database().reference().child("order-history").child(currentUID).observeSingleEvent(of: .value) { snapshot in
+                
+                guard let orderList = snapshot.value as? [String: AnyObject] else{ return }
+                for (key, value) in orderList{
+                    // key -> orderID
+                    // value -> order
+                    guard let date = value["date"] as? String else { return }
+                    guard let address = value["address"] as? String else{ return }
+                    guard let price = value["price"] as? Int else { return }
+                    guard let cardNumber = value["card_number"] as? String else{ return }
+                    guard let foodDetails = value["details"] as? [String: [String: String]] else{ return }
+                    let newOrder = Order(date: date, address: address, price: price, card_number: cardNumber, details: foodDetails)
+                    tempList.append(newOrder)
+                }
+                completion(tempList)
+            }
         }
     }
 }
