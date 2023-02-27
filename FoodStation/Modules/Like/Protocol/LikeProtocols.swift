@@ -13,6 +13,7 @@ protocol LikeViewToPresenter{
     var view: LikePresenterToView? { get set }
     
     func notifyViewDidLoad()
+    func notifyViewWillAppear()
     func foodForCell(at index: Int) -> Food?
     func didSelectFood(at index: Int)
     func numberOfItems() -> Int?

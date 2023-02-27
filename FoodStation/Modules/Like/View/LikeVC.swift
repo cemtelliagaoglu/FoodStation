@@ -28,7 +28,10 @@ class LikeVC: UIViewController{
         super.viewDidLoad()
         presenter?.notifyViewDidLoad()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        presenter?.notifyViewWillAppear()
+    }
 }
 
 //MARK: - CollectionView Methods

@@ -14,6 +14,8 @@ class LikePresenter: LikeViewToPresenter{
     
     func notifyViewDidLoad() {
         view?.configUI()
+    }
+    func notifyViewWillAppear() {
         interactor?.requestLoadingLikedFoods()
     }
     func foodForCell(at index: Int) -> Food? {
