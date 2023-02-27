@@ -55,11 +55,11 @@ class CartVC: UIViewController{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter?.notifyViewDidLoad()
+        presenter?.notifyViewWillAppear()
     }
     //MARK: - Handlers
     @objc func handleCheckoutTapped(){
-        print("Proceed To Checkout Tapped")
+        presenter?.checkoutTapped()
     }
     @objc func handleDeleteAllTapped(){
         let alert = UIAlertController(title: "Delete", message: "Are you sure to delete all cart?", preferredStyle: .alert)
@@ -86,7 +86,7 @@ extension CartVC: UITableViewDataSource,UITableViewDelegate{
         cell.indexPath = indexPath
         cell.foodImageView.kf.setImage(with: URL(string: imageURL)!)
         cell.nameLabel.text = food.foodName
-        cell.priceLabel.text = "\(food.foodPrice) ₺"
+        cell.priceLabel.text = "\(food.foodPrice) TL"
         cell.customStepper.itemCount = Int(food.foodAmount)!
         return cell
     }
@@ -109,7 +109,7 @@ extension CartVC: CartPresenterToView{
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             checkoutButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
-            checkoutButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -8),
+            checkoutButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -38),
             checkoutButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) + 50),
             totalPriceLabel.centerYAnchor.constraint(equalTo: checkoutButton.centerYAnchor),
             totalPriceLabel.trailingAnchor.constraint(equalTo: checkoutButton.leadingAnchor, constant: -16),

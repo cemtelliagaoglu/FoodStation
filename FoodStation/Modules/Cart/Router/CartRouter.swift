@@ -29,18 +29,23 @@ class CartRouter: CartPresenterToRouter{
         appearance.backgroundColor = UIColor(named: "bgColor1")
         appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "bgColor2")!,
                                                .font: UIFont(name: "OpenSans-MediumItalic", size: 25)!]
-        navController.navigationBar.tintColor = UIColor(named: "bgColor2")
-//        navController.navigationBar.prefersLargeTitles = true
+        navController.navigationBar.tintColor = .white
         navController.navigationBar.standardAppearance = appearance
         navController.navigationBar.scrollEdgeAppearance = appearance
+        navController.navigationItem.hidesBackButton = false
         
         router.navController = navController
         
         return navController
     }
     
-    func popVC() {
-        print("Cart Module has popped")
+    func pushToHomepage() {
+        navController?.tabBarController?.selectedIndex = 0
+    }
+    
+    func pushToCheckout() {
+        let checkoutVC = CheckoutRouter.createModule()
+        navController?.pushViewController(checkoutVC, animated: true)
     }
     
 }

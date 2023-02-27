@@ -14,6 +14,8 @@ class CartPresenter: CartViewToPresenter{
     
     func notifyViewDidLoad() {
         view?.configUI()
+    }
+    func notifyViewWillAppear() {
         interactor?.requestLoadCart()
     }
     func foodForCell(at index: Int) -> FoodInCart? {
@@ -38,6 +40,15 @@ class CartPresenter: CartViewToPresenter{
     func deleteAllCartTapped() {
         interactor?.requestDeleteAllCart()
     }
+    func checkoutTapped() {
+        let isCartEmpty = interactor?.numberOfFoodsInCart() == nil
+        if isCartEmpty{
+            view?.showErrorMessage("Add some foods in your cart first")
+            router?.pushToHomepage()
+        }else{
+            router?.pushToCheckout()
+        }
+    }
 }
 //MARK: - InteractorPresenter Methods
 extension CartPresenter: CartInteractorToPresenter{
@@ -58,7 +69,7 @@ extension CartPresenter: CartInteractorToPresenter{
         view?.setPriceLabel(with: "\(price) TL")
     }
     func deletedAllCartSuccessfully() {
-        router?.popVC()
+        router?.pushToHomepage()
         view?.reloadData()
     }
 }

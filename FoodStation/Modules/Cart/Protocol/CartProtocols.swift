@@ -12,12 +12,13 @@ protocol CartViewToPresenter{
     var router: CartPresenterToRouter? { get set }
     
     func notifyViewDidLoad()
+    func notifyViewWillAppear()
     func amountDidChange(at indexPath: IndexPath, newAmount: Int)
     func foodForCell(at index: Int) -> FoodInCart?
     func numberOfItems() -> Int?
     func shouldUpdatePriceLabel()
     func deleteAllCartTapped()
-    
+    func checkoutTapped()
 }
 protocol CartPresenterToInteractor{
     var presenter: CartInteractorToPresenter? { get set }
@@ -50,5 +51,6 @@ protocol CartPresenterToView{
 }
 protocol CartPresenterToRouter{
     static func createModule() -> UINavigationController
-    func popVC()
+    func pushToHomepage()
+    func pushToCheckout()
 }
