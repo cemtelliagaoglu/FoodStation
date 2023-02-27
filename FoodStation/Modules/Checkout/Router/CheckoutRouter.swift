@@ -5,8 +5,6 @@
 //  Created by admin on 24.02.2023.
 //
 
-import UIKit
-
 class CheckoutRouter: CheckoutPresenterToRouter{
     
     var view: CheckoutVC?
@@ -30,8 +28,8 @@ class CheckoutRouter: CheckoutPresenterToRouter{
     
     func showResultVC() {
         view?.navigationController?.present(ResultVC(), animated: true)
-        view?.navigationController?.popViewController(animated: false)
         view?.tabBarController?.selectedIndex = 0
+        view?.navigationController?.popViewController(animated: false)
     }
     
 }

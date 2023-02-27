@@ -66,7 +66,7 @@ extension CartPresenter: CartInteractorToPresenter{
         view?.showErrorMessage(errorMessage)
     }
     func calculatedTotalPrice(_ price: Int) {
-        view?.setPriceLabel(with: "\(price) TL")
+        view?.setPriceLabel(with: "Total: \(price) TL")
     }
     func deletedAllCartSuccessfully() {
         router?.pushToHomepage()

@@ -30,17 +30,18 @@ class CartVC: UIViewController{
         button.backgroundColor = UIColor(named: "bgColor1")
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleCheckoutTapped), for: .touchUpInside)
-        button.layer.cornerRadius = 20
+        button.layer.cornerRadius = 10
         return button
     }()
     
     let totalPriceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "OpenSans-Medium", size: 18)
+        label.font = UIFont(name: "OpenSans-Medium", size: 20)
         label.textColor = .black
         label.text = "0 TL"
         label.numberOfLines = 1
         label.minimumScaleFactor = 0.5
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -113,6 +114,7 @@ extension CartVC: CartPresenterToView{
             checkoutButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) + 50),
             totalPriceLabel.centerYAnchor.constraint(equalTo: checkoutButton.centerYAnchor),
             totalPriceLabel.trailingAnchor.constraint(equalTo: checkoutButton.leadingAnchor, constant: -16),
+            totalPriceLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),

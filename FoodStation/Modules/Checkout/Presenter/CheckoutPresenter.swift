@@ -5,8 +5,6 @@
 //  Created by admin on 24.02.2023.
 //
 
-import Foundation
-
 class CheckoutPresenter: CheckoutViewToPresenter{
     var interactor: CheckoutPresenterToInteractor?
     var view: CheckoutPresenterToView?
@@ -48,7 +46,7 @@ extension CheckoutPresenter: CheckoutInteractorToPresetner{
         view?.reloadData()
     }
     func calculatedTotalPrice(_ price: Int) {
-        view?.setPriceLabel("\(price) TL")
+        view?.setPriceLabel("Total: \(price) TL")
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)

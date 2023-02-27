@@ -5,8 +5,6 @@
 //  Created by admin on 24.02.2023.
 //
 
-import UIKit
-
 protocol CheckoutViewToPresenter{
     var interactor: CheckoutPresenterToInteractor? { get set }
     var router: CheckoutPresenterToRouter? { get set }

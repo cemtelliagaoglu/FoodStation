@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class CheckoutVC: UIViewController {
     //MARK: - Properties
@@ -139,7 +138,7 @@ class CheckoutVC: UIViewController {
     
     let totalPriceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "OpenSans-Medium", size: 18)
+        label.font = UIFont(name: "OpenSans-Medium", size: 20)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "0 TL"
@@ -233,6 +232,7 @@ extension CheckoutVC: CheckoutPresenterToView{
     
     func configUI() {
         view.backgroundColor = UIColor(named: "bgColor2")
+        navigationItem.title = "Checkout"
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -253,7 +253,7 @@ extension CheckoutVC: CheckoutPresenterToView{
             addressContainerView.topAnchor.constraint(equalTo: deliveryAddressTitleLabel.bottomAnchor, constant: 8),
             addressContainerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 32),
             addressContainerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -32),
-            addressContainerView.heightAnchor.constraint(equalToConstant: 50),
+            addressContainerView.heightAnchor.constraint(equalToConstant: 60),
             
             // creditCardTitleLabel
             creditCardTitleLabel.topAnchor.constraint(equalTo: addressContainerView.bottomAnchor, constant: 16),
@@ -263,7 +263,7 @@ extension CheckoutVC: CheckoutPresenterToView{
             creditCardContainerView.topAnchor.constraint(equalTo: creditCardTitleLabel.bottomAnchor, constant: 8),
             creditCardContainerView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 32),
             creditCardContainerView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -32),
-            creditCardContainerView.heightAnchor.constraint(equalToConstant: 50),
+            creditCardContainerView.heightAnchor.constraint(equalToConstant: 60),
             // collectionView
             tableView.topAnchor.constraint(equalTo: creditCardContainerView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
