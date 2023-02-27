@@ -29,7 +29,7 @@ class HomepageRouter: HomepagePresenterToRouter{
         appearance.backgroundColor = UIColor(named: "bgColor1")
         appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "bgColor2")!,
                                                .font: UIFont(name: "OpenSans-MediumItalic", size: 25)!]
-        navController.navigationBar.tintColor = UIColor(named: "bgColor2")
+        navController.navigationBar.tintColor = .white
 //        navController.navigationBar.prefersLargeTitles = true
         navController.navigationBar.standardAppearance = appearance
         navController.navigationBar.scrollEdgeAppearance = appearance

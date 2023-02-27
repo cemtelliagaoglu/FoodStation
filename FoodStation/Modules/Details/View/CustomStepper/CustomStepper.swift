@@ -38,7 +38,7 @@ class CustomStepper: UIView{
         let image = itemCount > 1 ? UIImage(systemName: "minus"): UIImage(systemName: "trash")
         button.setImage(image, for: .normal)
         button.layer.cornerRadius = 10
-        button.tintColor = UIColor(named: "bgColor2")
+        button.tintColor = .white
         button.backgroundColor = UIColor(named: "bgColor1")
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleLeftButtonPressed), for: .touchUpInside)
@@ -60,7 +60,7 @@ class CustomStepper: UIView{
         let button = UIButton(type: .custom)
         button.layer.cornerRadius = 10
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = UIColor(named: "bgColor2")
+        button.tintColor = .white
         button.backgroundColor = UIColor(named: "bgColor1")
         button.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false

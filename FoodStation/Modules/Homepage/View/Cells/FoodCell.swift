@@ -80,7 +80,6 @@ class FoodCell: UICollectionViewCell{
     lazy var bottomStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [nameLabel, priceLabel])
         stackView.axis = .vertical
-//        stackView.contentMode = .scaleToFill
         stackView.backgroundColor = .white
         stackView.distribution = .fill
         stackView.layer.cornerRadius = 10
@@ -96,6 +95,8 @@ class FoodCell: UICollectionViewCell{
         stackView.alignment = .center
         stackView.contentMode = .scaleToFill
         stackView.distribution = .fill
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
         stackView.spacing = 8
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
