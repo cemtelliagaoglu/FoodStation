@@ -202,6 +202,24 @@ struct APIService{
         }
     }
     
+    static func deleteItem(for currentUser: String,id: Int){
+        // delete food from cart
+        let deleteFoodBaseURL = "http://kasimadalan.pe.hu/yemekler/sepettenYemekSil.php"
+        
+        let params: [String:Any] = ["kullanici_adi": currentUser, "sepet_yemek_id": id]
+        AF.request(URL(string: deleteFoodBaseURL)!,method: .post, parameters: params).response(){ response in
+            if let data = response.data{
+                do{
+                    let response = try JSONDecoder().decode(CartResponse.self, from: data)
+                    print("Deleting CartID: \(id)...")
+                    print("Deleting: \(response.success == 1 ? "Success": "Failed")")
+                }catch{
+                    print(error)
+                }
+            }
+        }
+    }
+    
     static func deleteAllCart(completion: @escaping((Error?) -> ())){
         FirebaseService.requestUserEmail { email in
             if let currentUser = email{
@@ -218,6 +236,20 @@ struct APIService{
         }
     }
     
+    static func deleteAllCart(){
+        FirebaseService.requestUserEmail { email in
+            if let currentUser = email{
+                requestUserCartInfo{ cart in
+                    if let cart = cart{
+                        for food in cart{
+                            deleteItem(for: currentUser, id: Int(food.foodIDInCart)!)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     static func requestFoodsContaining(_ text: String, completion: @escaping(([Food]?, String?) -> ())) {
         let imagesBaseURLString = "http://kasimadalan.pe.hu/yemekler/resimler/"
         let allFoodsURLString = "http://kasimadalan.pe.hu/yemekler/tumYemekleriGetir.php"
@@ -226,7 +258,7 @@ struct APIService{
             if let data = response.data{
                 do{
                     let decodedData = try JSONDecoder().decode(FoodResponse.self, from: data)
-                    let filteredList = decodedData.foods.filter({ $0.foodName.contains(text)})
+                    let filteredList = decodedData.foods.filter({ $0.foodName.lowercased().contains(text.lowercased())})
                     var foods = [Food]()
                     // download food images
                     for var food in filteredList{
