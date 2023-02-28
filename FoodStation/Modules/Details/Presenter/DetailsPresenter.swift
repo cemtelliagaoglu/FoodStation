@@ -16,6 +16,7 @@ class DetailsPresenter: DetailsViewToPresenter{
     }
     func notifyViewWillAppear(for food: Food) {
         interactor?.requestFoodAmountInCart(for: food)
+        view?.hideTabBar(isHidden: true)
     }
     func foodDidSet(_ food: Food) {
         // request food amount in cart, if doesn't exist return 0
@@ -35,6 +36,7 @@ class DetailsPresenter: DetailsViewToPresenter{
     }
     func backButtonTapped() {
         router?.popVC()
+        view?.hideTabBar(isHidden: false)
     }
     
 }

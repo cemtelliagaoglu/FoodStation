@@ -41,6 +41,7 @@ protocol DetailsPresenterToView{
     func startLoadingAnimation()
     func stopLoadingAnimation()
     func setLikeButton(didLike: Bool)
+    func hideTabBar(isHidden: Bool)
 }
 
 
