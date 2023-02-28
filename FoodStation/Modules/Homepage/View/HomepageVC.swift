@@ -24,10 +24,8 @@ class HomepageVC: UIViewController {
     }()
     
     lazy var profileButton: UIBarButtonItem = {
-        let button = UIButton(type: .custom)
+        let button = UIButton(frame: .init(x: 0, y: 0, width: 35, height: 35))
         button.setBackgroundImage(UIImage(systemName: "person.circle"), for: .normal)
-        button.heightAnchor.constraint(equalToConstant: 32).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 32).isActive = true
         button.addTarget(self, action: #selector(handleProfileButtonTapped), for: .touchUpInside)
         button.tintColor = .white
         let barButton = UIBarButtonItem(customView: button)
