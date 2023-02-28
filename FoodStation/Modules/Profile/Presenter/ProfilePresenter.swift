@@ -37,6 +37,7 @@ extension ProfilePresenter: ProfileInteractorToPresenter{
     func loggedOutSuccessfully() {
         router?.pushToLoginVC()
         router?.popVC()
+        view?.hideTabBar(isHidden: false)
     }
     func requestFailed(with errorMessage: String) {
         view?.showErrorMessage(errorMessage)
