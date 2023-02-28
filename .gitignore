@@ -38,7 +38,7 @@ FirebaseMLModelDownloader/Tests/Integration/Resources/GoogleService-Info.plist
 FirebaseMLModelDownloader/Apps/Sample/**/GoogleService-Info.plist
 
 # FirebasePerformance dev test App and integration tests GoogleService-Info.plist
-FoodStation/Resources/Plists/GoogleService-Info
+FoodStation/Resources/Plists/GoogleService-Info.plist
 FirebasePerformance/**/GoogleService-Info.plist
 
 
