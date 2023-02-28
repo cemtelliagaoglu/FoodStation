@@ -30,6 +30,10 @@ class OrderHistoryVC: UIViewController{
         super.viewDidLoad()
         presenter?.notifyViewDidLoad()
     }
+    //MARK: - Handlers
+    @objc func handleBackButtonTapped(){
+        presenter?.backButtonTapped()
+    }
 }
 //MARK: - CollectionView Methods
 extension OrderHistoryVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
@@ -60,6 +64,11 @@ extension OrderHistoryVC: OrderHistoryPresenterToView{
     func configUI() {
         view.backgroundColor = UIColor(named: "bgColor2")
         navigationItem.title = "Order History"
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 25))
+        button.setBackgroundImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        button.addTarget(self, action: #selector(handleBackButtonTapped), for: .touchUpInside)
+        let backButton = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = backButton
         
         view.addSubview(collectionView)
         collectionView.delegate = self

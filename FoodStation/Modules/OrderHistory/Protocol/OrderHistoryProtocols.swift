@@ -13,6 +13,7 @@ protocol OrderHistoryViewToPresenter{
     func notifyViewDidLoad()
     func numberOfItems() -> Int?
     func orderForCell(at index: Int) -> Order?
+    func backButtonTapped()
 }
 
 protocol OrderHistoryPresenterToInteractor{
@@ -36,4 +37,5 @@ protocol OrderHistoryPresenterToView{
 
 protocol OrderHistoryPresenterToRouter{
     static func createModule() -> OrderHistoryVC
+    func popVC()
 }

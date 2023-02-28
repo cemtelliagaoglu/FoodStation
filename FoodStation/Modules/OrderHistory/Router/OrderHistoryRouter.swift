@@ -25,4 +25,7 @@ class OrderHistoryRouter: OrderHistoryPresenterToRouter{
         
         return view
     }
+    func popVC() {
+        viewController?.navigationController?.popViewController(animated: true)
+    }
 }

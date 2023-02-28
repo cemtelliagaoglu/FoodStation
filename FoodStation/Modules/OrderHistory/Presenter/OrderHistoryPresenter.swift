@@ -24,7 +24,9 @@ class OrderHistoryPresenter: OrderHistoryViewToPresenter{
     func orderForCell(at index: Int) -> Order? {
         return interactor?.orderInfo(at: index)
     }
-    
+    func backButtonTapped() {
+        router?.popVC()
+    }
 }
 //MARK: - InteractorToPresenter
 extension OrderHistoryPresenter: OrderHistoryInteractorToPresenter{
