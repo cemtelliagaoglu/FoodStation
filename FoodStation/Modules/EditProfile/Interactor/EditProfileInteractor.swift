@@ -11,10 +11,11 @@ class EditProfileInteractor: EditProfilePresenterToInteractor{
     
     func requestLoadUserInfo() {
         FirebaseService.requestLoadUserInfo { userInfo in
+            
             guard let name = userInfo["name"] as? String else{ return }
             guard let address = userInfo["address"] as? String else{ return }
-            guard let cardNumber = userInfo["card_number"] as? String else{ return }
-            self.presenter?.userInfoLoadedSuccessfully(name: name, address: address, cardNumber: cardNumber)
+            let cardNumber = userInfo["card_number"] as? String
+            self.presenter?.userInfoLoadedSuccessfully(name: name, address: address, cardNumber: cardNumber ?? "")
         }
     }
     func requestUpdateUserInfo(name: String, address: String, cardNumber: String) {

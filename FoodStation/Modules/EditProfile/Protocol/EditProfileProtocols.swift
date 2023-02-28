@@ -13,6 +13,7 @@ protocol EditProfileViewToPresenter{
     func notifyViewDidLoad()
     func notifyViewWillAppear()
     func saveChangesTapped(name: String, address: String, cardNumber: String)
+    func backButtonTapped()
 }
 
 protocol EditProfilePresenterToInteractor{

@@ -20,6 +20,9 @@ class EditProfilePresenter: EditProfileViewToPresenter{
     func saveChangesTapped(name: String, address: String, cardNumber: String) {
         interactor?.requestUpdateUserInfo(name: name, address: address, cardNumber: cardNumber)
     }
+    func backButtonTapped() {
+        router?.popVC()
+    }
 }
 //MARK: - InteractorToPresenter
 extension EditProfilePresenter: EditProfileInteractorToPresenter{
