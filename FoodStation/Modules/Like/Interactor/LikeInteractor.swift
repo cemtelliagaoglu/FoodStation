@@ -30,7 +30,7 @@ class LikeInteractor: LikePresenterToInteractor{
     }
     func removeLikedFood(at index: Int) {
         
-        guard let foodID = foodList?[index].foodId else{ return }
+        guard let foodID = foodList?[safe: index]?.foodId else{ return }
         FirebaseService.requestUpdateFoodLike(foodID: foodID, didLike: false) { error in
             if error != nil{
                 self.presenter?.requestFailed(with: error!.localizedDescription)
