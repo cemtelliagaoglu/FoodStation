@@ -114,7 +114,11 @@ extension ProfileVC: ProfilePresenterToView{
         
         view.backgroundColor = UIColor(named: "bgColor2")
         navigationItem.title = "Profile"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(handleBackButtonTapped))
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 25))
+        button.setBackgroundImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        button.addTarget(self, action: #selector(handleBackButtonTapped), for: .touchUpInside)
+        let backButton = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = backButton
         view.addSubview(tableView)
         
         tableView.dataSource = self

@@ -99,7 +99,11 @@ extension DetailsVC: DetailsPresenterToView{
     func configUI() {
         navigationItem.rightBarButtonItem = likeBarButton
         navigationItem.title = "Details"
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .plain, target: self, action: #selector(handleBackButtonTapped))
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 25))
+        button.setBackgroundImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        button.addTarget(self, action: #selector(handleBackButtonTapped), for: .touchUpInside)
+        let backButton = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = backButton
         
         view.backgroundColor = UIColor(named: "bgColor2")
         view.addSubview(imageView)
@@ -129,6 +133,9 @@ extension DetailsVC: DetailsPresenterToView{
             customStepper.heightAnchor.constraint(equalToConstant: 50),
             customStepper.widthAnchor.constraint(equalToConstant: 150)
         ])
+    }
+    func hideTabBar(isHidden: Bool) {
+        tabBarController?.tabBar.isHidden = isHidden
     }
     func startLoadingAnimation() {
         customStepper.startLoadingAnimation()
