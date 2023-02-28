@@ -1,7 +1,7 @@
 # FoodStation
 
 ## Description
-- **FoodStation** is an eCommerce app which has 10 pages which are:
+- **FoodStation** is an eCommerce app which has 11 pages which are:
 - Login, SignUp, Homepage, Cart, Details, Like, Profile, Edit Profile, Order History, Checkout, Result
  
  ## Architecture
