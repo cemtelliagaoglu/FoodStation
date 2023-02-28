@@ -32,9 +32,9 @@ class CheckoutInteractor: CheckoutPresenterToInteractor{
     func requestLoadUserInfo() {
         FirebaseService.requestLoadUserInfo { userInfo in
             guard let address = userInfo["address"] as? String else{ return }
-            guard let cardNumber = userInfo["card_number"] as? String else{ return }
+            let cardNumber = userInfo["card_number"] as? String
             self.userInfo = userInfo as? [String: String]
-            self.presenter?.loadedUserInfoSuccessfully(address: address, cardNumber: cardNumber)
+            self.presenter?.loadedUserInfoSuccessfully(address: address, cardNumber: cardNumber ?? "")
         }
     }
     

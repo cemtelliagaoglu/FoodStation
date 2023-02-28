@@ -16,6 +16,7 @@ class CheckoutPresenter: CheckoutViewToPresenter{
     func notifyViewWillAppear() {
         interactor?.requestLoadCart()
         interactor?.requestLoadUserInfo()
+        view?.hideTabBar(isHidden: true)
     }
     func orderButtonPressed() {
         interactor?.createOrder()
@@ -31,6 +32,10 @@ class CheckoutPresenter: CheckoutViewToPresenter{
     }
     func foodForCell(at index: Int) -> FoodInCart? {
         return interactor?.foodInfo(at: index)
+    }
+    func backButtonTapped() {
+        router?.popVC()
+        view?.hideTabBar(isHidden: false)
     }
     
 }

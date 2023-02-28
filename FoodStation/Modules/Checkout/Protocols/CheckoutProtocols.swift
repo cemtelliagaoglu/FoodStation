@@ -17,6 +17,7 @@ protocol CheckoutViewToPresenter{
     func foodForCell(at index: Int) -> FoodInCart?
     func numberOfItems() -> Int?
     func orderButtonPressed()
+    func backButtonTapped()
 }
 protocol CheckoutPresenterToInteractor{
     var presenter: CheckoutInteractorToPresetner? { get set }
@@ -43,9 +44,11 @@ protocol CheckoutPresenterToView{
     func setUserInfo(address: String, cardNumber: String)
     func setPriceLabel(_ price: String)
     func showErrorMessage(_ errorMessage: String)
+    func hideTabBar(isHidden: Bool)
 }
 
 protocol CheckoutPresenterToRouter{
     static func createModule() -> CheckoutVC
     func showResultVC()
+    func popVC()
 }

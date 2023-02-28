@@ -27,9 +27,10 @@ class CheckoutRouter: CheckoutPresenterToRouter{
     }
     
     func showResultVC() {
-        view?.navigationController?.present(ResultVC(), animated: true)
-        view?.tabBarController?.selectedIndex = 0
-        view?.navigationController?.popViewController(animated: false)
+        view?.navigationController?.pushViewController(ResultVC(), animated: true)
+    }
+    func popVC() {
+        view?.navigationController?.popViewController(animated: true)
     }
     
 }
