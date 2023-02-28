@@ -100,9 +100,9 @@ struct FirebaseService{
     static func requestUserUID(completion: @escaping((String?) -> ())){
         completion(Auth.auth().currentUser?.uid)
     }
-    static func createNewUserInfo(uid: String, name: String, address: String, card_number: String){
+    static func createNewUserInfo(uid: String, name: String, address: String){
         
-        let dictionary = ["name": name, "address": address, "card_number": card_number]
+        let dictionary = ["name": name, "address": address]
         Database.database().reference().child("user-info").child(uid).setValue(dictionary)
     }
     static func requestLoadUserInfo(completion: @escaping(([String:AnyObject]) -> ())){
@@ -118,12 +118,6 @@ struct FirebaseService{
         if let currentUID = Auth.auth().currentUser?.uid{
             // user-info --> name, address, card number
             Database.database().reference().child("user-info").child(currentUID).updateChildValues(["address": newAddress])
-        }
-    }
-    static func requestUpdateUserName(newName: String){
-        if let currentUID = Auth.auth().currentUser?.uid{
-            // user-info --> name, address, card number
-            Database.database().reference().child("user-info").child(currentUID).updateChildValues(["name": newName])
         }
     }
     static func requestUpdateUserCreditCard(newCardNumber: String){

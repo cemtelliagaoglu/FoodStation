@@ -10,14 +10,14 @@ protocol SignUpViewToPresenter{
     var router: SignUpPresenterToRouter?{ get set }
     
     func notifyViewDidLoad()
-    func signUpTapped(with email: String, _ password: String, _ name: String, address: String, cardNumber: String)
+    func signUpTapped(with email: String, _ password: String, _ name: String, address: String)
     func loginTapped()
 }
 
 protocol SignUpPresenterToInteractor{
     var presenter: SignUpInteractorToPresenter? { get set }
     
-    func requestSignUp(with email: String, _ password: String, _ name: String, address: String, cardNumber: String)
+    func requestSignUp(with email: String, _ password: String, _ name: String, address: String)
 }
 
 protocol SignUpInteractorToPresenter{

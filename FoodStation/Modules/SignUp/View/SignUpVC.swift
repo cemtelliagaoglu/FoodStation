@@ -27,7 +27,7 @@ class SignUpVC: UIViewController{
         textField.placeholder = "Your Name"
         textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
-        textField.textColor = UIColor(named: "textColor")
+        textField.textColor = .black
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
         textField.borderStyle = .roundedRect
@@ -43,12 +43,14 @@ class SignUpVC: UIViewController{
         textField.placeholder = "Email"
         textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
-        textField.textColor = UIColor(named: "bgColor1")
+        textField.textColor = .black
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 5
         textField.layer.borderWidth = 2
+        textField.minimumFontSize = 0.5
+        textField.adjustsFontSizeToFitWidth = true
         textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
@@ -68,33 +70,23 @@ class SignUpVC: UIViewController{
         return textField
     }()
     
-    lazy var addressTextView: UITextView = {
-        let textView = UITextView()
-        textView.font = UIFont(name: "OpenSans-Medium", size: 18)
-        textView.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
-        textView.text = "Address"
-        textView.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        textView.layer.cornerRadius = 5
-        textView.layer.borderWidth = 2
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
-    }()
-    
-    lazy var cardNumberTextField: UITextField = {
+    lazy var addressTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Card Number"
-        textField.keyboardType = .numberPad
-        textField.textColor = UIColor(named: "bgColor1")
+        textField.placeholder = "Your Address"
+        textField.keyboardType = .emailAddress
         textField.font = UIFont(name: "OpenSans-Medium", size: 20)
+        textField.textColor = .black
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.layer.borderColor = UIColor(named: "bgColor1")?.cgColor
         textField.borderStyle = .roundedRect
         textField.layer.cornerRadius = 5
         textField.layer.borderWidth = 2
+        textField.minimumFontSize = 0.8
+        textField.adjustsFontSizeToFitWidth = true
         textField.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return textField
     }()
-    
+
     lazy var signUpButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = .systemGray
@@ -120,7 +112,7 @@ class SignUpVC: UIViewController{
                                                          ])
         attributedText.append(NSAttributedString(string: "Tap here to Login",
                                                    attributes: [
-                                                    .foregroundColor: UIColor(named: "bgColor4")!,
+                                                    .foregroundColor: UIColor(named: "bgColor3")!,
                                                     .font: UIFont(name: "OpenSans-Medium", size: 16)!
                                                    ]))
         label.numberOfLines = 1
@@ -135,9 +127,9 @@ class SignUpVC: UIViewController{
     }()
     
     lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel,nameTextField, emailTextField,passwordTextField, addressTextView, cardNumberTextField])
+        let stackView = UIStackView(arrangedSubviews: [titleLabel,nameTextField, emailTextField, passwordTextField, addressTextField])
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.spacing = 16
         stackView.backgroundColor = .clear
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -155,9 +147,8 @@ class SignUpVC: UIViewController{
         if let email = emailTextField.text,
            let password = passwordTextField.text,
            let name = nameTextField.text,
-           let address = addressTextView.text,
-           let cardNumber = cardNumberTextField.text{
-            presenter?.signUpTapped(with: email, password, name, address: address, cardNumber: cardNumber)
+           let address = addressTextField.text{
+            presenter?.signUpTapped(with: email, password, name, address: address)
         }
         
     }
@@ -168,15 +159,14 @@ class SignUpVC: UIViewController{
     @objc func formValidation(){
         guard emailTextField.hasText,
               passwordTextField.hasText,
-              addressTextView.hasText && addressTextView.text != "Address",
-              cardNumberTextField.hasText,
+              addressTextField.hasText,
               passwordTextField.text!.count >= 6 else{
             signUpButton.isEnabled = false
             signUpButton.backgroundColor = .systemGray
             return
         }
         signUpButton.isEnabled = true
-        signUpButton.backgroundColor = UIColor(named: "bgColor4")
+        signUpButton.backgroundColor = UIColor(named: "bgColor1")
     }
     
 }
@@ -201,8 +191,9 @@ extension SignUpVC: SignUpPresenterToView{
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+            stackView.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant:  -32),
             // signUpButton
-            signUpButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 32),
+            signUpButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signUpButton.widthAnchor.constraint(equalToConstant: 100),
             // loginLabel
