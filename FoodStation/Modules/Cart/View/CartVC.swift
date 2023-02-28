@@ -24,7 +24,10 @@ class CartVC: UIViewController{
     }()
     
     lazy var checkoutButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.titlePadding = 16
         let button = UIButton(type: .custom)
+        button.configuration = config
         let attributedTitle = NSAttributedString(string: "Proceed to Checkout", attributes: [ .font: UIFont(name: "OpenSans-SemiBold", size: 20)!, .foregroundColor: UIColor(named: "bgColor2")!])
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.backgroundColor = UIColor(named: "bgColor1")
@@ -110,15 +113,15 @@ extension CartVC: CartPresenterToView{
         let safeArea = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             checkoutButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
-            checkoutButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -38),
-            checkoutButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) + 50),
+            checkoutButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -50),
+//            checkoutButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) + 50),
             totalPriceLabel.centerYAnchor.constraint(equalTo: checkoutButton.centerYAnchor),
             totalPriceLabel.trailingAnchor.constraint(equalTo: checkoutButton.leadingAnchor, constant: -16),
             totalPriceLabel.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor, constant: 16),
             tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: checkoutButton.topAnchor, constant: -8)
+            tableView.bottomAnchor.constraint(equalTo: checkoutButton.topAnchor, constant: -16)
         ])
     }
     func setPriceLabel(with price: String) {

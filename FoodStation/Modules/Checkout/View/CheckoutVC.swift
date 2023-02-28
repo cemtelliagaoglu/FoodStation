@@ -138,7 +138,7 @@ class CheckoutVC: UIViewController {
     
     let totalPriceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "OpenSans-Medium", size: 20)
+        label.font = UIFont(name: "OpenSans-Medium", size: 18)
         label.textColor = .black
         label.textAlignment = .center
         label.text = "0 TL"
@@ -149,7 +149,10 @@ class CheckoutVC: UIViewController {
     }()
     
     lazy var orderButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.contentInsets = .init(top: 16, leading: 16, bottom: 16, trailing: 16)
         let button = UIButton(type: .custom)
+        button.configuration = config
         let attributedTitle = NSAttributedString(string: "Order and Pay",
                                                  attributes: [
                                                     .font: UIFont(name: "OpenSans-Medium", size: 20)!,
@@ -205,7 +208,14 @@ class CheckoutVC: UIViewController {
         self.present(alert, animated: true)
     }
     @objc func handleOrderButtonTapped(){
-        presenter?.orderButtonPressed()
+        if creditCardLabel.text != "" && deliveryAddressLabel.text != ""{
+            presenter?.orderButtonPressed()
+        }else{
+            showErrorMessage("Card Number or Address is invalid")
+        }
+    }
+    @objc func handleBackButtonTapped(){
+        presenter?.backButtonTapped()
     }
 }
 //MARK: - TableView Methods
@@ -233,6 +243,12 @@ extension CheckoutVC: CheckoutPresenterToView{
     func configUI() {
         view.backgroundColor = UIColor(named: "bgColor2")
         navigationItem.title = "Checkout"
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 25))
+        button.setBackgroundImage(UIImage(systemName: "arrow.backward"), for: .normal)
+        button.addTarget(self, action: #selector(handleBackButtonTapped), for: .touchUpInside)
+        let backButton = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = backButton
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -268,15 +284,17 @@ extension CheckoutVC: CheckoutPresenterToView{
             tableView.topAnchor.constraint(equalTo: creditCardContainerView.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: totalPriceLabel.topAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: totalPriceLabel.topAnchor, constant: -8),
            // totalPriceLabel
-            totalPriceLabel.bottomAnchor.constraint(equalTo: orderButton.topAnchor, constant: -4),
-            totalPriceLabel.centerXAnchor.constraint(equalTo: orderButton.centerXAnchor),
+            totalPriceLabel.bottomAnchor.constraint(equalTo: orderButton.topAnchor, constant: -16),
+            totalPriceLabel.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
             // orderButton
             orderButton.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor, constant: -16),
             orderButton.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -35),
-            orderButton.widthAnchor.constraint(equalToConstant: 150),
         ])
+    }
+    func hideTabBar(isHidden: Bool) {
+        tabBarController?.tabBar.isHidden = isHidden
     }
     func setUserInfo(address: String, cardNumber: String) {
         deliveryAddressLabel.text = address

@@ -48,6 +48,11 @@ class ResultVC: UIViewController{
     //MARK: - Handler
     func setupView(){
         view.backgroundColor = UIColor(named: "bgColor1")
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 35, height: 30))
+        button.setBackgroundImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+        button.addTarget(self, action: #selector(handleBackButtonTapped), for: .touchUpInside)
+        let backButton = UIBarButtonItem(customView: button)
+        navigationItem.leftBarButtonItem = backButton
         
         view.addSubview(animationView)
         view.addSubview(messageLabel)
@@ -61,5 +66,10 @@ class ResultVC: UIViewController{
             messageLabel.topAnchor.constraint(equalTo: animationView.bottomAnchor),
             messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+    }
+    @objc func handleBackButtonTapped(){
+        tabBarController?.tabBar.isHidden = false
+        tabBarController?.selectedIndex = 0
+        navigationController?.popToRootViewController(animated: true)
     }
 }

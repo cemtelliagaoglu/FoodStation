@@ -78,7 +78,7 @@ class LoginVC: UIViewController{
                                                          ])
         attributedText.append(NSAttributedString(string: "Tap here to Sign Up",
                                                    attributes: [
-                                                    .foregroundColor: UIColor(named: "bgColor4")!,
+                                                    .foregroundColor: UIColor(named: "bgColor3")!,
                                                     .font: UIFont(name: "OpenSans-Medium", size: 16)!
                                                    ]))
         label.numberOfLines = 1

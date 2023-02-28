@@ -20,7 +20,7 @@ class OrderCell: UICollectionViewCell{
         label.font = UIFont(name: "OpenSans-Regular", size: 16)
         label.textColor = .black
         label.numberOfLines = 2
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.7
         label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -47,10 +47,11 @@ class OrderCell: UICollectionViewCell{
     }()
     let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont(name: "OpenSans-Regular", size: 20)
+        label.font = UIFont(name: "OpenSans-Regular", size: 18)
         label.textColor = .black
         label.numberOfLines = 1
-        label.minimumScaleFactor = 0.5
+        label.minimumScaleFactor = 0.7
+        label.adjustsFontSizeToFitWidth = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -81,18 +82,6 @@ class OrderCell: UICollectionViewCell{
         return view
     }()
     
-//    lazy var stackView: UIStackView = {
-//        let stackView = UIStackView(arrangedSubviews: [topContainerView])
-//        stackView.backgroundColor = .white
-//        stackView.axis = .vertical
-//        stackView.spacing = 4
-////        stackView.alignment = .top
-//        stackView.distribution = .fill
-//        stackView.layer.cornerRadius = 10
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        return stackView
-//    }()
-    
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -109,19 +98,14 @@ class OrderCell: UICollectionViewCell{
         addSubview(priceLabel)
         
         NSLayoutConstraint.activate([
-            // stackView
-//            stackView.topAnchor.constraint(equalTo: topAnchor),
-//            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
-            
             topContainerView.topAnchor.constraint(equalTo: topAnchor),
             topContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             topContainerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            topContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -50),
+            topContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -60),
             // priceLabel
             priceLabel.centerYAnchor.constraint(equalTo: topContainerView.centerYAnchor),
-            priceLabel.leadingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: 8)
+            priceLabel.leadingAnchor.constraint(equalTo: topContainerView.trailingAnchor, constant: 4),
+            priceLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
     func orderDidSet(){

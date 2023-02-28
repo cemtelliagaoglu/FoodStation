@@ -105,26 +105,26 @@ extension HomepageVC: UICollectionViewDataSource,UICollectionViewDelegate, UICol
         if indexPath.section == 0{
             return CGSize(width: UIScreen.main.bounds.width - 32, height: 80)
         }else{
-            let width = (UIScreen.main.bounds.width - 24) / 2
+            let width = (UIScreen.main.bounds.width - 48) / 2
             return CGSize(width: width, height: 150)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return 16
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if section == 0{
             return 0
         }else{
-            return 8
+            return 16
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0{
             return UIEdgeInsets(top: 4, left: 8, bottom: 8, right: 8)
         }else{
-            return UIEdgeInsets(top: 4, left: 8, bottom: 38, right: 8)
+            return UIEdgeInsets(top: 4, left: 16, bottom: 50, right: 16)
         }
         
     }
